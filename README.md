@@ -32,3 +32,7 @@ https://www.figma.com/community/file/1273571982885059508/e-commerce-website-temp
 Workflow проверяет сборку и запускает Chromium: ширины 320, 390, 768, 1440 и 1920 px, телефон в альбомной ориентации, горизонтальное переполнение, язык, меню и reduced motion. Скриншоты сохраняются в артефакт `responsive-screenshots` в GitHub Actions. Это эмуляция размеров экрана; проверка на реальных iOS/Android устройствах остаётся полезной.
 
 Локальный запуск проверок (после сборки): `npm install --no-save --package-lock=false playwright@1.62.1`, `npx playwright install chromium`, `node scripts/check-responsive.mjs`.
+
+## Евклид
+
+Второй проект в портфолио: оригинальный дизайн, доработанная адаптивность, поиск по странице, доступные вкладки, FAQ и проверка формы. Демо: https://pavelsed33.github.io/Evklid/ . Код: https://github.com/PavelSed33/Evklid .

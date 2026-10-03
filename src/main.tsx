@@ -15,7 +15,7 @@ const text = {
     role: 'FRONTEND РАЗРАБОТЧИК', available: 'Открыт к сотрудничеству', hero: 'Идеи становятся', accent: 'интерфейсами.',
     intro: 'Создаю сайты, которые приятно смотреть и удобно использовать. От первого экрана до последнего взаимодействия.',
     view: 'Смотреть проект', contact: 'Обсудить задачу', since: 'В разработке с 2021', location: 'Работаю удалённо', scroll: 'Дальше — моя работа',
-    projectLabel: '01 / ИЗБРАННЫЙ ПРОЕКТ', projectTitle: 'Дизайн в действии.', projectKind: 'Интернет-магазин · Проект для портфолио',
+    projectLabel: '01 / ИЗБРАННЫЕ ПРОЕКТЫ', projectTitle: 'Дизайн в действии.', projectKind: 'Интернет-магазин · Проект для портфолио',
     projectIntro: 'От макета — к магазину, которым можно пользоваться.',
     projectDescription: 'Реализация SHOP.CO по дизайну Hamza Naeem. Главная страница, каталог, карточка товара и корзина объединены в работающий пользовательский сценарий.',
     taskTitle: 'Задача', task: 'Перенести визуальный стиль макета в адаптивный интерфейс и связать страницы магазина.',
@@ -38,7 +38,7 @@ const text = {
     role: 'FRONTEND DEVELOPER', available: 'Open to collaboration', hero: 'Turning ideas into', accent: 'interfaces.',
     intro: 'I build websites that look considered and feel easy to use. From the first screen to the final interaction.',
     view: 'Explore my work', contact: 'Let’s talk', since: 'Developing since 2021', location: 'Working remotely', scroll: 'Discover my work',
-    projectLabel: '01 / SELECTED PROJECT', projectTitle: 'Design, brought to life.', projectKind: 'E-commerce · Portfolio project',
+    projectLabel: '01 / SELECTED PROJECTS', projectTitle: 'Design, brought to life.', projectKind: 'E-commerce · Portfolio project',
     projectIntro: 'From a design file to an interactive storefront.',
     projectDescription: 'SHOP.CO, based on a design by Hamza Naeem. A homepage, catalogue, product page and cart connected into a working shopping experience.',
     taskTitle: 'The task', task: 'Translate the visual identity into a responsive interface and connect the storefront pages.',
@@ -184,6 +184,22 @@ function App() {
           <div className="project-info"><div><p className="eyebrow">{t.projectKind}</p><h3>SHOP.CO</h3><p className="project-lead">{t.projectIntro}</p></div><div><p className="muted">{t.projectDescription}</p><div className="tags">{['HTML','CSS','JavaScript','localStorage'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={demo} target="_blank" rel="noreferrer">{t.live}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/portfolio/tree/main/public/projects/shopco" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div></div>
           <div className="project-details"><div><h4>{t.taskTitle}</h4><p>{t.task}</p></div><div><h4>{t.solutionTitle}</h4><p>{t.solution}</p></div><ul>{t.features.map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul></div>
           <div className="project-footnote"><a href="https://www.figma.com/community/file/1273571982885059508/e-commerce-website-template-freebie" target="_blank" rel="noreferrer">{t.design}<ArrowUpRight size={14}/></a><span>{t.demoNote}</span></div>
+        </article>
+        <article className="featured-project evklid-project" data-reveal>
+          <a className="project-visual evklid-visual" href="https://pavelsed33.github.io/Evklid/" target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть сайт Евклид' : 'Open the Evklid website'}>
+            <img src={`${base}evklid-preview.webp`} width="1440" height="900" alt={lang === 'ru' ? 'Первый экран сайта Евклид' : 'Evklid website homepage'} loading="lazy"/>
+            <span className="visual-open"><ArrowUpRight size={24}/></span>
+          </a>
+          <div className="project-info">
+            <div><p className="eyebrow">{lang === 'ru' ? 'Проектные решения · Учебный проект' : 'Project solutions · Portfolio project'}</p><h3>{lang === 'ru' ? 'Евклид' : 'Evklid'}</h3><p className="project-lead">{lang === 'ru' ? 'Адаптивный сайт с работающими взаимодействиями.' : 'A responsive website with working interactions.'}</p></div>
+            <div><p className="muted">{lang === 'ru' ? 'Сайт компании по проектным решениям. Сохранён исходный дизайн, доработаны адаптивность, поиск по странице, этапы работы, FAQ и форма заявки.' : 'A project solutions company website. The original design is preserved, with improved responsive layouts, page search, work stages, FAQ and application form.'}</p><div className="tags">{['HTML','CSS','JavaScript','Swiper'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href="https://pavelsed33.github.io/Evklid/" target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть Евклид' : 'Explore Evklid'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/Evklid" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
+          </div>
+          <div className="project-details">
+            <div><h4>{t.taskTitle}</h4><p>{lang === 'ru' ? 'Сохранить визуальный стиль и сделать интерфейс удобным на компьютере, планшете и телефоне.' : 'Preserve the visual style and make the interface usable on desktop, tablet and phone.'}</p></div>
+            <div><h4>{t.solutionTitle}</h4><p>{lang === 'ru' ? 'Меню с клавиатурной навигацией, поиск по разделам, доступные вкладки и FAQ, проверка полей формы.' : 'Keyboard accessible navigation, section search, accessible tabs and FAQ, and form validation.'}</p></div>
+            <ul>{(lang === 'ru' ? ['Проверен на 8 размерах', 'Телефон в двух ориентациях', 'Управление с клавиатуры'] : ['Checked at 8 viewport sizes', 'Portrait and landscape', 'Keyboard navigation']).map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul>
+          </div>
+          <div className="project-footnote"><span>{lang === 'ru' ? 'Оригинальный дизайн сохранён.' : 'Original design preserved.'}</span><span>{lang === 'ru' ? 'Учебная версия: форма проверяет данные, заявки не отправляются.' : 'Portfolio demo: form data is validated, applications are not submitted.'}</span></div>
         </article>
       </section>
       <section id="about" tabIndex={-1} className="section wrap about-section">

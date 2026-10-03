@@ -19,12 +19,15 @@ try {
     await page.evaluate(()=>document.fonts.ready);
     const measure=()=>page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
     const ru=await measure();assert(ru.document<=ru.viewport+1,`Russian overflow at ${width}: ${ru.document}`);
-    assert.equal(await page.locator('.featured-project').count(),1);
+    assert.equal(await page.locator('.featured-project').count(),2);
     assert.equal(await page.locator('iframe').count(),0);
-    assert(await page.locator('.project-visual').getAttribute('href')==='/portfolio/projects/shopco/');
+    assert.equal(await page.locator('.evklid-project a[href="https://pavelsed33.github.io/Evklid/"]').count(),2);
+    assert(await page.locator('.project-visual').first().getAttribute('href')==='/portfolio/projects/shopco/');
     assert(await page.locator('[data-reveal]').first().isVisible());
-    await page.locator('.project-visual').scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>[...document.querySelectorAll('.project-visual img')].every(img=>img.complete&&img.naturalWidth>0));
+    await page.locator('.project-visual').first().scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>[...document.querySelectorAll('.store-preview img')].every(img=>img.complete&&img.naturalWidth>0));
+    await page.locator('.evklid-visual').scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>document.querySelector('.evklid-visual img').naturalWidth>0);
     await page.evaluate(()=>scrollTo(0,0));
     await page.screenshot({path:`responsive-screenshots/ru-${width}x${height}.png`,fullPage:true});
     if(width<=760){
