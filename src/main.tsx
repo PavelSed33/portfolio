@@ -9,11 +9,12 @@ const demo = `${base}projects/shopco/`;
 const asset = (name: string) => `${demo}src/assets/${name}`;
 const email = 'Peresvetovec@gmail.com';
 const sections = ['projects', 'about', 'skills', 'contact'];
+const cleanPath = (path: string) => path.split('/').filter(Boolean).join('/');
 const pagePath = () => {
   const path = window.location.pathname.startsWith(base) ? window.location.pathname.slice(base.length) : window.location.pathname;
-  return path.replace(/^\\/+|\\/+$/g, '') || 'home';
+  return cleanPath(path) || 'home';
 };
-const pageHref = (page = '') => base + (page ? page.replace(/^\\/+|\\/+$/g, '') + '/' : '');
+const pageHref = (page = '') => base + (page ? cleanPath(page) + '/' : '');
 const text = {
   ru: {
     name: 'Павел Седых', first: 'Павел', last: 'Седых', nav: ['Проект', 'Обо мне', 'Навыки', 'Контакты'], skip: 'Перейти к содержимому',
