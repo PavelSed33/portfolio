@@ -5,6 +5,7 @@ import './style.css';
 
 type Lang='ru'|'en';
 const projects=[
+{name:'SHOP.CO',ru:'Учебный интернет-магазин по макету Hamza Naeem: адаптивная верстка, поиск, фильтры, карточка товара и корзина с сохранением.',en:'Portfolio storefront based on Hamza Naeem’s design: responsive layout, search, filters, product details and a persistent cart.',stack:['HTML','CSS','JavaScript','localStorage'],repo:'https://github.com/PavelSed33/shopco-ecommerce',demo:`${import.meta.env.BASE_URL}projects/shopco/`},
 {name:'Blanchard',ru:'Адаптивный арт-проект с интерактивными элементами и подключением API Wikipedia.',en:'Responsive art project with interactive UI and Wikipedia API integration.',stack:['HTML','CSS','JavaScript','API'],repo:'https://github.com/PavelSed33/Blanchard',demo:'https://pavelsed33.github.io/Blanchard/'},
 {name:'Evklid',ru:'Адаптивный сайт строительной компании с аккуратной версткой и интерактивным интерфейсом.',en:'Responsive construction company website with precise layout and interactive UI.',stack:['HTML','CSS','JavaScript'],repo:'https://github.com/PavelSed33/Evklid',demo:'https://pavelsed33.github.io/Evklid/'},
 {name:'EleganceShop',ru:'Интерфейс интернет-магазина с фокусом на современную визуальную подачу и адаптивность.',en:'E-commerce interface focused on modern visual presentation and responsive design.',stack:['HTML','CSS','JavaScript'],repo:'https://github.com/PavelSed33/EleganceShop',demo:'https://pavelsed33.github.io/EleganceShop/'},
