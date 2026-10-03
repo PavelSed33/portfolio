@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 const browser = await chromium.launch();
 await mkdir('finsweet-screenshots', { recursive: true });
 try {
-  for (const [width,height] of [[320,740],[390,844],[844,390],[768,1024],[1024,768],[1600,1000]]) {
+  for (const [width,height] of [[320,740],[390,844],[844,390],[768,1024],[1024,768],[1251,900],[1600,1000]]) {
     const page = await browser.newPage({ viewport: { width,height }, reducedMotion: 'reduce' });
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     await page.goto('file://' + resolve('public/projects/finsweet/index.html'));
