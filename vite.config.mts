@@ -18,6 +18,7 @@ export default defineConfig({
         coffee: resolve(process.cwd(), 'work/roasted-coffee/index.html'),
         tea: resolve(process.cwd(), 'work/tea/index.html'),
         elegance: resolve(process.cwd(), 'work/elegance-shop/index.html'),
+        sitdown: resolve(process.cwd(), 'work/sitdownpls/index.html'),
       },
     },
   },

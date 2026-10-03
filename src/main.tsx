@@ -252,6 +252,18 @@ function App() {
           </div>
           <div className="project-footnote"><span>{lang === 'ru' ? 'Макет: WebCademy · HTML / CSS' : 'Design: WebCademy · HTML / CSS'}</span><span>{lang === 'ru' ? 'Статичная демонстрация для ПК. Корзина и рассылка не подключены.' : 'Static desktop demo. Cart updates and newsletter delivery are not connected.'}</span></div>
         </article>}
+        {(!projectRoute || route === 'work/sitdownpls') && <article className="featured-project sitdown-project" data-reveal>
+          <a className="project-visual coffee-visual" href="https://pavelsed33.github.io/sitDownPls/" target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть SitDownPls' : 'Open SitDownPls'}>
+            <img src={`${base}sitdown-preview.webp`} width="1920" height="400" alt={lang === 'ru' ? 'Мебель и интерьер — SitDownPls' : 'Furniture and interiors — SitDownPls'} loading="lazy"/>
+            <span className="coffee-preview-title" aria-hidden="true">SitDownPls</span>
+            <span className="visual-open"><ArrowUpRight size={24}/></span>
+          </a>
+          <div className="project-info">
+            <div><p className="eyebrow">{lang === 'ru' ? 'Мебельный магазин · Учебный проект' : 'Furniture storefront · Portfolio project'}</p><h3><a href={pageHref('work/sitdownpls')}>SitDownPls</a></h3><p className="project-lead">{lang === 'ru' ? 'Многостраничный сайт магазина мебели.' : 'A multipage furniture storefront.'}</p></div>
+            <div><p className="muted">{lang === 'ru' ? 'Главная, каталог, карточка товара и страница сотрудничества. В проекте реализованы слайдеры, галерея товара, модальные окна и проверка полей формы.' : 'Homepage, catalogue, product page and a partnership page. The project includes sliders, a product gallery, modal windows and form validation.'}</p><div className="tags">{['HTML','CSS','JavaScript','Swiper','jQuery'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href="https://pavelsed33.github.io/sitDownPls/" target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть сайт' : 'Explore the site'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/sitDownPls" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
+          </div>
+          <div className="project-footnote"><span>{lang === 'ru' ? '4 страницы · Мебель и интерьер' : '4 pages · Furniture and interiors'}</span><span>{lang === 'ru' ? 'Учебная демонстрация интерфейса магазина.' : 'Portfolio demonstration of a storefront interface.'}</span></div>
+        </article>}
       </section>}
       {route === 'about' && <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>
