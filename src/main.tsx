@@ -201,6 +201,23 @@ function App() {
           </div>
           <div className="project-footnote"><span>{lang === 'ru' ? 'Оригинальный дизайн сохранён.' : 'Original design preserved.'}</span><span>{lang === 'ru' ? 'Учебная версия: форма проверяет данные, заявки не отправляются.' : 'Portfolio demo: form data is validated, applications are not submitted.'}</span></div>
         </article>
+        <article className="featured-project coffee-project" data-reveal>
+          <a className="project-visual coffee-visual" href={`${base}projects/roasted-coffee/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть Roasted Coffee' : 'Open Roasted Coffee'}>
+            <img src={`${base}coffee-preview.webp`} width="1440" height="800" alt={lang === 'ru' ? 'Кофе и кофейные зёрна — Roasted Coffee' : 'Coffee and coffee beans — Roasted Coffee'} loading="lazy"/>
+            <span className="coffee-preview-title" aria-hidden="true">Roasted coffee<br/>best choice</span>
+            <span className="visual-open"><ArrowUpRight size={24}/></span>
+          </a>
+          <div className="project-info">
+            <div><p className="eyebrow">{lang === 'ru' ? 'Кофейный магазин · Учебный проект' : 'Coffee storefront · Portfolio project'}</p><h3>Roasted Coffee</h3><p className="project-lead">{lang === 'ru' ? 'Тёмный интерфейс кофейного магазина.' : 'A dark coffee storefront interface.'}</p></div>
+            <div><p className="muted">{lang === 'ru' ? 'Статичная HTML/CSS-верстка трёх страниц: главной с каталогом, карточки кофе и корзины. Акцент на визуальной подаче продукта, фотографиях и типографике.' : 'Static HTML/CSS layouts for three pages: a homepage with a catalogue, a coffee product page and a cart. Focused on product presentation, photography and typography.'}</p><div className="tags">{['HTML','CSS','Multi-page'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={`${base}projects/roasted-coffee/`} target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть сайт' : 'Explore the site'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/Roasted-coffee" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
+          </div>
+          <div className="project-details">
+            <div><h4>{t.taskTitle}</h4><p>{lang === 'ru' ? 'Сверстать страницы кофейного магазина в едином визуальном стиле.' : 'Build coffee storefront pages with a consistent visual style.'}</p></div>
+            <div><h4>{t.solutionTitle}</h4><p>{lang === 'ru' ? 'Главная с каталогом и информационными блоками, описание продукта и макет корзины.' : 'A homepage with a catalogue and information sections, a product description and a cart layout.'}</p></div>
+            <ul>{(lang === 'ru' ? ['3 HTML-страницы', 'Каталог и карточка кофе', 'Единые стили CSS'] : ['3 HTML pages', 'Catalogue and product page', 'Shared CSS styles']).map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul>
+          </div>
+          <div className="project-footnote"><span>Roasted Coffee · HTML / CSS</span><span>{lang === 'ru' ? 'Статичная демонстрация. Добавление в корзину и оплата не подключены.' : 'Static demo. Cart updates and payments are not connected.'}</span></div>
+        </article>
       </section>
       <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>

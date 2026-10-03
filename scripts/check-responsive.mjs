@@ -19,13 +19,16 @@ try {
     await page.evaluate(()=>document.fonts.ready);
     const measure=()=>page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
     const ru=await measure();assert(ru.document<=ru.viewport+1,`Russian overflow at ${width}: ${ru.document}`);
-    assert.equal(await page.locator('.featured-project').count(),2);
+    assert.equal(await page.locator('.featured-project').count(),3);
     assert.equal(await page.locator('iframe').count(),0);
+    assert.equal(await page.locator('.coffee-project a[href="/portfolio/projects/roasted-coffee/"]').count(),2);
     assert.equal(await page.locator('.evklid-project a[href="https://pavelsed33.github.io/Evklid/"]').count(),2);
     assert(await page.locator('.project-visual').first().getAttribute('href')==='/portfolio/projects/shopco/');
     assert(await page.locator('[data-reveal]').first().isVisible());
     await page.locator('.project-visual').first().scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>[...document.querySelectorAll('.store-preview img')].every(img=>img.complete&&img.naturalWidth>0));
+    await page.locator('.coffee-visual').scrollIntoViewIfNeeded();
+    await page.waitForFunction(()=>document.querySelector('.coffee-visual img').naturalWidth>0);
     await page.locator('.evklid-visual').scrollIntoViewIfNeeded();
     await page.waitForFunction(()=>document.querySelector('.evklid-visual img').naturalWidth>0);
     await page.evaluate(()=>scrollTo(0,0));
@@ -49,6 +52,14 @@ try {
     assert.deepEqual(errors,[]);
     await page.close();console.log(`PASS ${width}×${height}: both languages, overflow, navigation, project`);
   }
+  const coffee=await browser.newPage({viewport:{width:1440,height:900}});
+  for(const route of ['','opened_product.html','checkout.html']){
+    const response=await coffee.goto('http://127.0.0.1:4173/portfolio/projects/roasted-coffee/'+route,{waitUntil:'networkidle'});
+    assert(response.ok());
+    assert(await coffee.evaluate(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0)));
+    assert(await coffee.locator('link[rel="stylesheet"]').evaluate(el=>!!el.sheet));
+  }
+  await coffee.close();
   const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'no-preference'});
   await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
   await page.locator('#contact').scrollIntoViewIfNeeded();

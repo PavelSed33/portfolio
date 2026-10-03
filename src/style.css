@@ -17,3 +17,5 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.reveal-pending{opacity:1;transform:none}}
 
 .featured-project + .featured-project{margin-top:42px}.evklid-visual{padding-bottom:0}.evklid-visual>img{width:100%;height:auto;border-radius:8px 8px 0 0}
+
+.coffee-visual{padding:0}.coffee-visual>img{width:100%;height:auto;max-height:570px;object-fit:cover}.coffee-preview-title{position:absolute;left:7%;top:24%;font-size:clamp(30px,5vw,70px);font-weight:700;line-height:1.15;letter-spacing:-.04em;color:#fff;text-transform:uppercase;max-width:70%;text-shadow:0 2px 20px #000a}
