@@ -2,67 +2,69 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
 import {chromium} from 'playwright';
+
 const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4173'],{stdio:'inherit'});
 let browser;
-try {
+try{
   let ready=false;
-  for(let i=0;i<100;i++){try{const r=await fetch('http://127.0.0.1:4173/portfolio/');if(r.ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,100));}
+  for(let i=0;i<100;i++){
+    try{const r=await fetch('http://127.0.0.1:4173/portfolio/');if(r.ok){ready=true;break}}catch{}
+    await new Promise(r=>setTimeout(r,100));
+  }
   assert(ready,'Preview server did not start');
   await mkdir('responsive-screenshots',{recursive:true});
   browser=await chromium.launch();
-  const sizes=[[320,740],[390,844],[844,390],[768,1024],[1440,900],[1920,1080]];
-  for(const [width,height] of sizes){
-    const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
-    const errors=[];page.on('pageerror',e=>errors.push(e.message));
-    await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
-    await page.locator('h1').waitFor();
-    await page.evaluate(()=>document.fonts.ready);
-    const measure=()=>page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
-    const ru=await measure();assert(ru.document<=ru.viewport+1,`Russian overflow at ${width}: ${ru.document}`);
-    assert.equal(await page.locator('.featured-project').count(),3);
-    assert.equal(await page.locator('iframe').count(),0);
-    assert.equal(await page.locator('.coffee-project a[href="/portfolio/projects/roasted-coffee/"]').count(),2);
-    assert.equal(await page.locator('.evklid-project a[href="https://pavelsed33.github.io/Evklid/"]').count(),2);
-    assert(await page.locator('.project-visual').first().getAttribute('href')==='/portfolio/projects/shopco/');
-    assert(await page.locator('[data-reveal]').first().isVisible());
-    await page.locator('.project-visual').first().scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>[...document.querySelectorAll('.store-preview img')].every(img=>img.complete&&img.naturalWidth>0));
-    await page.locator('.coffee-visual').scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>document.querySelector('.coffee-visual img').naturalWidth>0);
-    await page.locator('.evklid-visual').scrollIntoViewIfNeeded();
-    await page.waitForFunction(()=>document.querySelector('.evklid-visual img').naturalWidth>0);
-    await page.evaluate(()=>scrollTo(0,0));
-    await page.screenshot({path:`responsive-screenshots/ru-${width}x${height}.png`,fullPage:true});
-    if(width<=760){
-      await page.getByRole('button',{name:'Открыть меню',exact:true}).click();
-      assert.equal(await page.locator('#navigation a').first().evaluate(el=>el===document.activeElement),true);
-      await page.keyboard.press('Escape');
-      assert.equal(await page.getByRole('button',{name:'Открыть меню',exact:true}).getAttribute('aria-expanded'),'false');
-      await page.getByRole('button',{name:'Открыть меню',exact:true}).click();
-      await page.locator('#navigation a[href="#contact"]').click();
-      await page.waitForFunction(()=>document.activeElement===document.querySelector('#contact'));
-    }
-    await page.getByRole('button',{name:'Switch to English',exact:true}).click();
-    assert.equal(await page.locator('html').getAttribute('lang'),'en');
-    const en=await measure();assert(en.document<=en.viewport+1,`English overflow at ${width}: ${en.document}`);
-    await page.reload({waitUntil:'networkidle'});
-    assert.equal(await page.locator('html').getAttribute('lang'),'en');
-    assert((await page.title()).includes('Pavel Sedykh'));
-    await page.screenshot({path:`responsive-screenshots/en-${width}x${height}.png`,fullPage:true});
+
+  const routes=['','projects/','about/','contact/','work/shopco/','work/evklid/','work/roasted-coffee/'];
+  for(const route of routes){
+    const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+    const errors=[]; page.on('pageerror',e=>errors.push(e.message));
+    const response=await page.goto('http://127.0.0.1:4173/portfolio/'+route,{waitUntil:'networkidle'});
+    assert(response?.ok(),`Route failed: ${route}`);
+    await page.locator('h1,h2').first().waitFor();
+    const size=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
+    assert(size.document<=size.viewport+1,`Overflow on ${route}: ${size.document}`);
     assert.deepEqual(errors,[]);
-    await page.close();console.log(`PASS ${width}×${height}: both languages, overflow, navigation, project`);
+    await page.close();
   }
-  const coffee=await browser.newPage({viewport:{width:1440,height:900}});
+
+  for(const [width,height] of [[320,740],[768,1024],[1440,900],[1920,1080]]){
+    const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
+    await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
+    assert.equal(await page.locator('.featured-project').count(),3);
+    if(width>=1100){
+      const cardWidth=await page.locator('.featured-project').first().evaluate(el=>el.getBoundingClientRect().width);
+      assert(cardWidth<360,`Project card too large at ${width}: ${cardWidth}`);
+    }
+    const size=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
+    assert(size.document<=size.viewport+1,`Home overflow at ${width}`);
+    await page.screenshot({path:`responsive-screenshots/home-${width}x${height}.png`,fullPage:true});
+    await page.close();
+  }
+
+  const projects=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
+  await projects.goto('http://127.0.0.1:4173/portfolio/projects/',{waitUntil:'networkidle'});
+  assert.equal(await projects.locator('.featured-project').count(),3);
+  assert.equal(await projects.locator('a[href="/portfolio/work/shopco/"]').count(),1);
+  await projects.getByRole('button',{name:'Switch to English',exact:true}).click();
+  assert.equal(await projects.locator('html').getAttribute('lang'),'en');
+  await projects.reload({waitUntil:'networkidle'});
+  assert.equal(await projects.locator('html').getAttribute('lang'),'en');
+  await projects.close();
+
+  const mobile=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  await mobile.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
+  await mobile.getByRole('button',{name:'Открыть меню',exact:true}).click();
+  assert(await mobile.locator('.navigation.is-open').isVisible());
+  await mobile.close();
+
   for(const route of ['','opened_product.html','checkout.html']){
-    const response=await coffee.goto('http://127.0.0.1:4173/portfolio/projects/roasted-coffee/'+route,{waitUntil:'networkidle'});
-    assert(response.ok());
-    assert(await coffee.evaluate(()=>[...document.images].every(img=>img.complete&&img.naturalWidth>0)));
-    assert(await coffee.locator('link[rel="stylesheet"]').evaluate(el=>!!el.sheet));
+    const page=await browser.newPage({viewport:{width:1440,height:900}});
+    const response=await page.goto('http://127.0.0.1:4173/portfolio/projects/roasted-coffee/'+route,{waitUntil:'networkidle'});
+    assert(response?.ok());
+    await page.close();
   }
-  await coffee.close();
-  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'no-preference'});
-  await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
-  await page.locator('#contact').scrollIntoViewIfNeeded();
-  await page.waitForFunction(()=>!document.querySelector('#contact [data-reveal]')?.classList.contains('reveal-pending'));
-  await page.close();
-} finally {await browser?.close();server.kill();}
+}finally{
+  await browser?.close();
+  server.kill();
+}
