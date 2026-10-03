@@ -228,6 +228,18 @@ function App() {
           </div>
           <div className="project-footnote"><span>Roasted Coffee · HTML / CSS</span><span>{lang === 'ru' ? 'Статичная демонстрация. Добавление в корзину и оплата не подключены.' : 'Static demo. Cart updates and payments are not connected.'}</span></div>
         </article>}
+        {(!projectRoute || route === 'work/tea') && <article className="featured-project tea-project" data-reveal>
+          <a className="project-visual coffee-visual" href={`${base}projects/tea/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть Tea — TealuxE' : 'Open Tea — TealuxE'}>
+            <img src={`${base}projects/tea/images/top-bg.jpeg`} width="1599" height="500" alt={lang === 'ru' ? 'Зелёные чайные плантации — TealuxE' : 'Green tea plantations — TealuxE'} loading="lazy"/>
+            <span className="coffee-preview-title" aria-hidden="true">TealuxE</span>
+            <span className="visual-open"><ArrowUpRight size={24}/></span>
+          </a>
+          <div className="project-info">
+            <div><p className="eyebrow">{lang === 'ru' ? 'Чайный магазин · Учебный проект' : 'Tea storefront · Portfolio project'}</p><h3><a href={pageHref('work/tea')}>Tea — TealuxE</a></h3><p className="project-lead">{lang === 'ru' ? 'Светлый лендинг о чае и маленьких паузах.' : 'A light landing page about tea and moments of calm.'}</p></div>
+            <div><p className="muted">{lang === 'ru' ? 'Верстка главной страницы чайного магазина: коллекции чая, отзывы, блог и блок подписки. Природные фотографии, спокойная палитра и выразительная типографика.' : 'A tea storefront homepage with tea collections, testimonials, a blog and a newsletter layout. Nature photography, a calm palette and expressive typography.'}</p><div className="tags">{['HTML','CSS','JavaScript'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={`${base}projects/tea/`} target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть сайт' : 'Explore the site'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/tea" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
+          </div>
+          <div className="project-footnote"><span>TealuxE · HTML / CSS / JavaScript</span><span>{lang === 'ru' ? 'Демонстрация верстки. Покупки, поиск и рассылка не подключены.' : 'Layout demo. Shopping, search and newsletter delivery are not connected.'}</span></div>
+        </article>}
       </section>}
       {route === 'about' && <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>

@@ -16,6 +16,7 @@ export default defineConfig({
         shopco: resolve(process.cwd(), 'work/shopco/index.html'),
         evklid: resolve(process.cwd(), 'work/evklid/index.html'),
         coffee: resolve(process.cwd(), 'work/roasted-coffee/index.html'),
+        tea: resolve(process.cwd(), 'work/tea/index.html'),
       },
     },
   },
