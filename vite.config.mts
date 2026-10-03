@@ -11,6 +11,7 @@ export default defineConfig({
         home: resolve(process.cwd(), 'index.html'),
         projects: resolve(process.cwd(), 'projects/index.html'),
         about: resolve(process.cwd(), 'about/index.html'),
+        skills: resolve(process.cwd(), 'skills/index.html'),
         contact: resolve(process.cwd(), 'contact/index.html'),
         shopco: resolve(process.cwd(), 'work/shopco/index.html'),
         evklid: resolve(process.cwd(), 'work/evklid/index.html'),
