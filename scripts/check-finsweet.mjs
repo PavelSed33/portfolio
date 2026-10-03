@@ -38,8 +38,27 @@ try {
     await page.locator('#email').fill('test@example.com');
     await page.locator('#inquiry-form button').click();
     assert((await page.locator('.form-status').innerText()).includes('no inquiry has been sent'));
+    await page.goto('file://' + resolve('public/projects/finsweet/about.html'));
+    await page.evaluate(async () => { document.querySelectorAll('img').forEach(img => img.loading = 'eager'); await document.fonts.ready; await Promise.all([...document.images].map(img => img.decode())); });
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `About overflow at ${width}`);
+    assert.equal(await page.locator('h1').innerText(), 'Our designs solve problems');
+    assert.equal(await page.locator('.team-card').count(), 4);
+    assert.equal(await page.locator('.partner-logos img').count(), 5);
+    assert.equal(await page.locator('#main-nav [aria-current="page"]').innerText(), 'About us');
+    await page.screenshot({ path: `finsweet-screenshots/about-${width}x${height}.png`, fullPage: true });
+    if (width <= 960) await page.getByRole('button', {name:'Open menu',exact:true}).click();
+    await page.locator('#main-nav [data-pricing]').click();
+    assert(await page.locator('dialog').isVisible());
+    assert.equal(await page.locator('[data-dialog-contact]').getAttribute('href'), 'index.html#contact');
+    await page.locator('[data-dialog-contact]').click();
+    await page.waitForURL('**/index.html#contact');
+    assert(await page.locator('#inquiry-form').isVisible());
+    await page.evaluate(() => scrollTo(0,0));
+    if (width <= 960) await page.getByRole('button', {name:'Open menu',exact:true}).click();
+    await page.locator('#main-nav a[href="about.html"]').click();
+    await page.waitForURL('**/about.html');
     assert.deepEqual(errors,[]);
-    console.log(`PASS ${width}×${height}: assets, fonts, overflow, navigation, FAQ, dialogs, form`);
+    console.log(`PASS ${width}×${height}: Home + About: assets, fonts, overflow, navigation, FAQ, dialogs, form`);
     await page.close();
   }
 } finally { await browser.close(); }
