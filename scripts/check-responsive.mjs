@@ -15,7 +15,7 @@ try{
   await mkdir('responsive-screenshots',{recursive:true});
   browser=await chromium.launch();
 
-  const routes=['','projects/','about/','skills/','contact/','work/shopco/','work/evklid/','work/roasted-coffee/','work/tea/'];
+  const routes=['','projects/','about/','skills/','contact/','work/shopco/','work/evklid/','work/roasted-coffee/','work/tea/','work/elegance-shop/'];
   for(const route of routes){
     const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
     const errors=[]; page.on('pageerror',e=>errors.push(e.message));
@@ -31,7 +31,7 @@ try{
   for(const [width,height] of [[320,740],[768,1024],[1440,900],[1920,1080]]){
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
     await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
-    assert.equal(await page.locator('.featured-project').count(),4);
+    assert.equal(await page.locator('.featured-project').count(),5);
     if(width>=1100){
       const cardWidth=await page.locator('.featured-project').first().evaluate(el=>el.getBoundingClientRect().width);
       assert(cardWidth<360,`Project card too large at ${width}: ${cardWidth}`);
@@ -58,7 +58,7 @@ try{
 
   const projects=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
   await projects.goto('http://127.0.0.1:4173/portfolio/projects/',{waitUntil:'networkidle'});
-  assert.equal(await projects.locator('.featured-project').count(),4);
+  assert.equal(await projects.locator('.featured-project').count(),5);
   assert.equal(await projects.locator('a[href="/portfolio/work/shopco/"]').count(),1);
   await projects.getByRole('button',{name:'Switch to English',exact:true}).click();
   assert.equal(await projects.locator('html').getAttribute('lang'),'en');

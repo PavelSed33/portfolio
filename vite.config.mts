@@ -17,6 +17,7 @@ export default defineConfig({
         evklid: resolve(process.cwd(), 'work/evklid/index.html'),
         coffee: resolve(process.cwd(), 'work/roasted-coffee/index.html'),
         tea: resolve(process.cwd(), 'work/tea/index.html'),
+        elegance: resolve(process.cwd(), 'work/elegance-shop/index.html'),
       },
     },
   },

@@ -240,6 +240,18 @@ function App() {
           </div>
           <div className="project-footnote"><span>TealuxE · HTML / CSS / JavaScript</span><span>{lang === 'ru' ? 'Демонстрация верстки. Покупки, поиск и рассылка не подключены.' : 'Layout demo. Shopping, search and newsletter delivery are not connected.'}</span></div>
         </article>}
+        {(!projectRoute || route === 'work/elegance-shop') && <article className="featured-project elegance-project" data-reveal>
+          <a className="project-visual coffee-visual" href={`${base}projects/elegance-shop/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть EleganceShop' : 'Open EleganceShop'}>
+            <img src={`${base}projects/elegance-shop/img/header/photo.jpg`} width="670" height="737" alt={lang === 'ru' ? 'Летняя коллекция одежды — EleganceShop' : 'Summer clothing collection — EleganceShop'} loading="lazy"/>
+            <span className="coffee-preview-title" aria-hidden="true">Elegance</span>
+            <span className="visual-open"><ArrowUpRight size={24}/></span>
+          </a>
+          <div className="project-info">
+            <div><p className="eyebrow">{lang === 'ru' ? 'Магазин одежды · Учебный проект' : 'Fashion storefront · Portfolio project'}</p><h3><a href={pageHref('work/elegance-shop')}>EleganceShop</a></h3><p className="project-lead">{lang === 'ru' ? 'Витрина летней коллекции одежды.' : 'A showcase for a summer clothing collection.'}</p></div>
+            <div><p className="muted">{lang === 'ru' ? 'Статичная HTML/CSS-верстка главной страницы: новинки, избранные товары, промоблоки, блог и форма подписки. Светлая палитра и крупная типографика по учебному макету WebCademy.' : 'A static HTML/CSS homepage with new arrivals, featured products, promotional sections, a blog and a newsletter layout. A light palette and large typography based on a WebCademy learning template.'}</p><div className="tags">{['HTML','CSS'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={`${base}projects/elegance-shop/`} target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть сайт' : 'Explore the site'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/EleganceShop" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
+          </div>
+          <div className="project-footnote"><span>{lang === 'ru' ? 'Макет: WebCademy · HTML / CSS' : 'Design: WebCademy · HTML / CSS'}</span><span>{lang === 'ru' ? 'Статичная демонстрация для ПК. Корзина и рассылка не подключены.' : 'Static desktop demo. Cart updates and newsletter delivery are not connected.'}</span></div>
+        </article>}
       </section>}
       {route === 'about' && <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>

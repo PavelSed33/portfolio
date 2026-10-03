@@ -1,0 +1,40 @@
+/* Section header */
+
+.section-header {
+    margin-bottom: 40px;
+}
+
+.section-header__title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: 'Playfair Display' ,serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 42px;
+    line-height: 56px;
+    text-align: center;
+    color: #000000;
+}
+
+.section-header__description {
+    margin: 0 auto;
+    max-width: 630px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    /* text-transform: uppercase; */
+    color: #999999;
+}
+
+.section-header__description--uppercase {
+    text-transform: uppercase;
+}
+
+.section-header__description--16px {
+    font-size: 16px;
+}
+
+.section-header__description p {
+    margin-top: 0;
+}
