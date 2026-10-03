@@ -15,7 +15,7 @@ try{
   await mkdir('responsive-screenshots',{recursive:true});
   browser=await chromium.launch();
 
-  const routes=['','projects/','about/','contact/','work/shopco/','work/evklid/','work/roasted-coffee/'];
+  const routes=['','projects/','about/','skills/','contact/','work/shopco/','work/evklid/','work/roasted-coffee/'];
   for(const route of routes){
     const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
     const errors=[]; page.on('pageerror',e=>errors.push(e.message));
@@ -41,6 +41,20 @@ try{
     await page.screenshot({path:`responsive-screenshots/home-${width}x${height}.png`,fullPage:true});
     await page.close();
   }
+
+  const about=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  await about.goto('http://127.0.0.1:4173/portfolio/about/',{waitUntil:'networkidle'});
+  assert.equal(await about.locator('#about').count(),1);
+  assert.equal(await about.locator('#skills').count(),0);
+  assert.equal(await about.locator('a[href="/portfolio/about/"][aria-current="page"]').count(),1);
+  await about.close();
+
+  const skills=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  await skills.goto('http://127.0.0.1:4173/portfolio/skills/',{waitUntil:'networkidle'});
+  assert.equal(await skills.locator('#about').count(),0);
+  assert.equal(await skills.locator('#skills').count(),1);
+  assert.equal(await skills.locator('a[href="/portfolio/skills/"][aria-current="page"]').count(),1);
+  await skills.close();
 
   const projects=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
   await projects.goto('http://127.0.0.1:4173/portfolio/projects/',{waitUntil:'networkidle'});
