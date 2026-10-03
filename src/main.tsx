@@ -1,22 +1,199 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {ExternalLink,Mail,Send,ArrowDown,Code2,Menu,X,Globe2,ArrowUpRight} from 'lucide-react';
+import {ArrowUpRight, ArrowDown, ArrowUp, Check, Copy, Code2, ExternalLink, Globe2, Menu, Send, X} from 'lucide-react';
 import './style.css';
 
-type Lang='ru'|'en';
-const projects=[
-{name:'SHOP.CO',ru:'Учебный интернет-магазин по макету Hamza Naeem: адаптивная верстка, поиск, фильтры, карточка товара и корзина с сохранением.',en:'Portfolio storefront based on Hamza Naeem’s design: responsive layout, search, filters, product details and a persistent cart.',stack:['HTML','CSS','JavaScript','localStorage'],repo:'https://github.com/PavelSed33/shopco-ecommerce',demo:`${import.meta.env.BASE_URL}projects/shopco/`}];
-const copy={ru:{nav:['Обо мне','Навыки','Проекты','Контакты'],eyebrow:'FRONTEND РАЗРАБОТЧИК',lead:'Создаю современные, быстрые и адаптивные веб-интерфейсы. В разработке с 2021 года.',view:'Смотреть проекты',aboutLabel:'01 / ОБО МНЕ',aboutTitle:<>Превращаю идеи<br/>в <em>интерфейсы.</em></>,about1:'Я frontend-разработчик, занимаюсь веб-разработкой с 2021 года. Работаю на фрилансе и создаю пользовательские интерфейсы — от точной реализации дизайна до готового адаптивного продукта.',about2:'Уделяю внимание чистоте кода, производительности, доступности и корректной работе интерфейса на разных устройствах.',since:'Начало разработки',work:'Формат работы',skillsLabel:'02 / НАВЫКИ',skillsTitle:<>Технологии, с которыми<br/>я <em>работаю.</em></>,projectsLabel:'03 / ПРОЕКТЫ',projectsTitle:<>Избранные <em>работы.</em></>,all:'Все репозитории',demo:'Открыть сайт',code:'Код',contactLabel:'04 / КОНТАКТЫ',contactTitle:<>Есть проект?<br/><em>Давайте обсудим.</em></>,contactText:'Открыт к фриланс-проектам и интересным предложениям по frontend-разработке.',name:'Ваше имя',email:'Email',message:'Расскажите о проекте',send:'Отправить сообщение',direct:'Или напишите напрямую',years:'5+ лет',yearsSub:'в веб-разработке'},en:{nav:['About','Skills','Projects','Contact'],eyebrow:'FRONTEND DEVELOPER',lead:'I build modern, fast and responsive web interfaces. Developing for the web since 2021.',view:'View projects',aboutLabel:'01 / ABOUT',aboutTitle:<>Turning ideas<br/>into <em>interfaces.</em></>,about1:'I am a frontend developer working in web development since 2021. As a freelancer, I build user interfaces from precise design implementation to complete responsive products.',about2:'I care about clean code, performance, accessibility and reliable interfaces across different devices.',since:'Started development',work:'Work format',skillsLabel:'02 / SKILLS',skillsTitle:<>Technologies I<br/><em>work with.</em></>,projectsLabel:'03 / PROJECTS',projectsTitle:<>Selected <em>work.</em></>,all:'All repositories',demo:'Live demo',code:'Code',contactLabel:'04 / CONTACT',contactTitle:<>Have a project?<br/><em>Let’s talk.</em></>,contactText:'Available for freelance projects and interesting frontend development opportunities.',name:'Your name',email:'Email',message:'Tell me about your project',send:'Send message',direct:'Or contact me directly',years:'5+ years',yearsSub:'in web development'}};
-function App(){
- const[open,setOpen]=React.useState(false);const[lang,setLang]=React.useState<Lang>('ru');const t=copy[lang];
- React.useEffect(()=>{const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));return()=>io.disconnect()},[lang]);
- const submit=(e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault();const fd=new FormData(e.currentTarget);const subject=encodeURIComponent(`Portfolio: ${fd.get('name')}`);const body=encodeURIComponent(`${fd.get('message')}\n\n${lang==='ru'?'Ответить':'Reply to'}: ${fd.get('email')}`);window.location.href=`mailto:Peresvetovec@gmail.com?subject=${subject}&body=${body}`};
- const navIds=['about','skills','projects','contact'];
- return <><header><a className="logo" href="#top">PS<span>.</span></a><nav className={open?'open':''}>{t.nav.map((x,i)=><a key={x} onClick={()=>setOpen(false)} href={'#'+navIds[i]}>{x}</a>)}</nav><div className="headActions"><button className="lang" onClick={()=>setLang(lang==='ru'?'en':'ru')}><Globe2 size={15}/>{lang==='ru'?'EN':'RU'}</button><a className="gh top" href="https://github.com/PavelSed33" target="_blank" rel="noreferrer"> GitHub</a></div><button className="menu" aria-label="Menu" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></header>
- <main id="top"><section className="hero"><div className="heroText"><div className="eyebrow"><span/> {t.eyebrow}</div><h1>Седых<br/><em>Павел</em></h1><p>{t.lead}</p><div className="actions"><a className="primary" href="#projects">{t.view} <ArrowDown size={18}/></a><a className="secondary" href="https://github.com/PavelSed33" target="_blank" rel="noreferrer"> GitHub</a></div></div><div className="portrait"><div className="orbit orbit1"/><div className="orbit orbit2"/><div className="glow"/><img src="https://github.com/PavelSed33.png?size=460" alt="Седых Павел"/><div className="badge"><Code2/><div><b>{t.years}</b><small>{t.yearsSub}</small></div></div><span className="floatTag">&lt;frontend /&gt;</span></div></section>
- <section id="about" className="about reveal"><div><span className="num">{t.aboutLabel}</span><h2>{t.aboutTitle}</h2></div><div className="aboutText"><p>{t.about1}</p><p>{t.about2}</p><div className="stats"><div><b>2021</b><small>{t.since}</small></div><div><b>Freelance</b><small>{t.work}</small></div></div></div></section>
- <section id="skills" className="reveal"><span className="num">{t.skillsLabel}</span><h2>{t.skillsTitle}</h2><div className="skills">{['HTML5','CSS3 / SCSS','JavaScript','Responsive UI','REST API','Git / GitHub'].map((s,i)=><div className="skill" key={s}><span>0{i+1}</span><b>{s}</b></div>)}</div></section>
- <section id="projects" className="reveal"><span className="num">{t.projectsLabel}</span><div className="sectionHead"><h2>{t.projectsTitle}</h2><a href="https://github.com/PavelSed33?tab=repositories" target="_blank" rel="noreferrer">{t.all} <ExternalLink size={16}/></a></div><div className="projectGrid">{projects.map((p,i)=><article className="projectCard" key={p.name}><a className="preview" href={p.demo} target="_blank" rel="noreferrer"><iframe title={`${p.name} preview`} src={p.demo} loading="lazy" tabIndex={-1}/><div className="previewFallback"><Code2/><span>{p.name}</span></div><span className="previewNo">0{i+1}</span><span className="previewOpen"><ArrowUpRight/></span></a><div className="projectBody"><h3>{p.name}</h3><p>{p[lang]}</p><div className="tags">{p.stack.map(x=><span key={x}>{x}</span>)}</div><div className="projectLinks"><a href={p.demo} target="_blank" rel="noreferrer"><ExternalLink size={15}/>{t.demo}</a><a href={p.repo} target="_blank" rel="noreferrer">{t.code}</a></div></div></article>)}</div></section>
- <section id="contact" className="contact reveal"><div className="contactIntro"><span className="num">{t.contactLabel}</span><h2>{t.contactTitle}</h2><p>{t.contactText}</p><small>{t.direct}</small><div className="directLinks"><a href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer"><Send size={18}/>@Peresvetovec</a><a href="mailto:Peresvetovec@gmail.com"><Mail size={18}/>Peresvetovec@gmail.com</a></div></div><form onSubmit={submit}><label><span>{t.name}</span><input name="name" required autoComplete="name"/></label><label><span>{t.email}</span><input name="email" type="email" required autoComplete="email"/></label><label><span>{t.message}</span><textarea name="message" rows={5} required/></label><button className="primary" type="submit">{t.send}<Send size={17}/></button></form></section></main>
- <footer><span>© 2026 Седых Павел</span><div className="footerLinks"><a href="https://github.com/PavelSed33" target="_blank" rel="noreferrer" aria-label="GitHub"><span>GitHub</span></a><a href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer" aria-label="Telegram"><Send size={19}/><span>Telegram</span></a><a href="mailto:Peresvetovec@gmail.com" aria-label="Email"><Mail size={19}/><span>Gmail</span></a></div><span>Frontend Developer</span></footer></>}
+type Lang = 'ru' | 'en';
+const base = import.meta.env.BASE_URL;
+const demo = `${base}projects/shopco/`;
+const asset = (name: string) => `${demo}src/assets/${name}`;
+const email = 'Peresvetovec@gmail.com';
+const sections = ['projects', 'about', 'skills', 'contact'];
+const text = {
+  ru: {
+    name: 'Павел Седых', first: 'Павел', last: 'Седых', nav: ['Проект', 'Обо мне', 'Навыки', 'Контакты'], skip: 'Перейти к содержимому',
+    role: 'FRONTEND РАЗРАБОТЧИК', available: 'Открыт к сотрудничеству', hero: 'Идеи становятся', accent: 'интерфейсами.',
+    intro: 'Создаю сайты, которые приятно смотреть и удобно использовать. От первого экрана до последнего взаимодействия.',
+    view: 'Смотреть проект', contact: 'Обсудить задачу', since: 'В разработке с 2021', location: 'Работаю удалённо', scroll: 'Дальше — моя работа',
+    projectLabel: '01 / ИЗБРАННЫЙ ПРОЕКТ', projectTitle: 'Дизайн в действии.', projectKind: 'Интернет-магазин · Проект для портфолио',
+    projectIntro: 'От макета — к магазину, которым можно пользоваться.',
+    projectDescription: 'Реализация SHOP.CO по дизайну Hamza Naeem. Главная страница, каталог, карточка товара и корзина объединены в работающий пользовательский сценарий.',
+    taskTitle: 'Задача', task: 'Перенести визуальный стиль макета в адаптивный интерфейс и связать страницы магазина.',
+    solutionTitle: 'Реализация', solution: 'Поиск, фильтрация и сортировка товаров, выбор варианта, галерея и корзина с сохранением между посещениями.',
+    features: ['4 страницы магазина', 'Поиск и фильтры', 'Корзина в localStorage'], live: 'Открыть SHOP.CO', code: 'Исходный код', design: 'Дизайн: Hamza Naeem', demoNote: 'Учебный проект. Оплата и отправка заказов не подключены.', preview: 'Открыть демонстрацию SHOP.CO',
+    aboutLabel: '02 / ОБО МНЕ', aboutTitle: 'Внимание к деталям.', aboutAccent: 'На каждом экране.',
+    about1: 'Я Павел, frontend-разработчик. Занимаюсь веб-разработкой с 2021 года и работаю на фрилансе. Превращаю дизайн в понятные, живые интерфейсы.',
+    about2: 'Мне важны аккуратная верстка, доступность и предсказуемое поведение сайта — с мышью, клавиатурой или касанием.',
+    approach: ['Сначала структура и сценарии', 'Затем детали и адаптивность', 'Проверка перед публикацией'], experience: 'Начало работы', format: 'Формат', freelance: 'Фриланс',
+    skillsLabel: '03 / ИНСТРУМЕНТЫ', skillsTitle: 'Технологии под задачу.',
+    skills: ['Семантика и доступность', 'Сетки, адаптивность, анимации', 'Логика и взаимодействия', 'Компоненты и типизация', 'Данные и интеграции', 'История изменений и публикация'],
+    contactLabel: '04 / КОНТАКТЫ', contactTitle: 'Давайте сделаем', contactAccent: 'что-то хорошее.', contactText: 'Расскажите о задаче или просто напишите. Открыт к проектам и предложениям по frontend-разработке.',
+    telegram: 'Написать в Telegram', copy: 'Скопировать email', copied: 'Email скопирован', copyError: 'Не удалось скопировать. Email можно выделить вручную.',
+    formName: 'Ваше имя', formEmail: 'Ваш email', formMessage: 'О задаче', placeholder: 'Что хотите сделать? Сроки, идея, ссылка на макет…', send: 'Подготовить письмо', formHint: 'Кнопка откроет вашу почтовую программу с готовым текстом.', formStatus: 'Письмо подготовлено. Если почтовая программа не открылась, напишите в Telegram или скопируйте email.',
+    top: 'Наверх', menu: 'Открыть меню', close: 'Закрыть меню', language: 'Switch to English', footer: 'Сделано с вниманием к деталям.',
+    description: 'Павел Седых — frontend-разработчик. Адаптивные сайты, React, TypeScript и JavaScript. Избранный проект SHOP.CO.'
+  },
+  en: {
+    name: 'Pavel Sedykh', first: 'Pavel', last: 'Sedykh', nav: ['Project', 'About', 'Skills', 'Contact'], skip: 'Skip to content',
+    role: 'FRONTEND DEVELOPER', available: 'Open to collaboration', hero: 'Turning ideas into', accent: 'interfaces.',
+    intro: 'I build websites that look considered and feel easy to use. From the first screen to the final interaction.',
+    view: 'Explore my work', contact: 'Let’s talk', since: 'Developing since 2021', location: 'Working remotely', scroll: 'Discover my work',
+    projectLabel: '01 / SELECTED PROJECT', projectTitle: 'Design, brought to life.', projectKind: 'E-commerce · Portfolio project',
+    projectIntro: 'From a design file to an interactive storefront.',
+    projectDescription: 'SHOP.CO, based on a design by Hamza Naeem. A homepage, catalogue, product page and cart connected into a working shopping experience.',
+    taskTitle: 'The task', task: 'Translate the visual identity into a responsive interface and connect the storefront pages.',
+    solutionTitle: 'The implementation', solution: 'Product search, filtering and sorting, variant selection, image gallery and a cart that persists between visits.',
+    features: ['4 storefront pages', 'Search and filters', 'Cart in localStorage'], live: 'Explore SHOP.CO', code: 'Source code', design: 'Design: Hamza Naeem', demoNote: 'Portfolio demo. Payments and order submission are not connected.', preview: 'Open the SHOP.CO demo',
+    aboutLabel: '02 / ABOUT ME', aboutTitle: 'Considered details.', aboutAccent: 'On every screen.',
+    about1: 'I’m Pavel, a frontend developer working on the web since 2021. As a freelancer, I turn designs into clear, interactive experiences.',
+    about2: 'I care about precise layouts, accessibility and predictable behaviour — with a mouse, keyboard or touch.',
+    approach: ['Structure and user journeys first', 'Details and responsive layouts next', 'Verification before publishing'], experience: 'Started developing', format: 'Work format', freelance: 'Freelance',
+    skillsLabel: '03 / TOOLKIT', skillsTitle: 'The tools for the task.',
+    skills: ['Semantics and accessibility', 'Layouts, responsiveness and motion', 'Logic and interactions', 'Components and type safety', 'Data and integrations', 'Version control and publishing'],
+    contactLabel: '04 / CONTACT', contactTitle: 'Let’s build', contactAccent: 'something good.', contactText: 'Tell me about your idea, or just say hello. Available for projects and frontend development opportunities.',
+    telegram: 'Message on Telegram', copy: 'Copy email', copied: 'Email copied', copyError: 'Could not copy. You can select the email address manually.',
+    formName: 'Your name', formEmail: 'Your email', formMessage: 'Your idea', placeholder: 'What would you like to build? An idea, timeframe, design link…', send: 'Prepare an email', formHint: 'This opens your email application with a prepared message.', formStatus: 'Your email is ready. If your email app did not open, use Telegram or copy the email address.',
+    top: 'Back to top', menu: 'Open menu', close: 'Close menu', language: 'Переключить на русский', footer: 'Built with care for the details.',
+    description: 'Pavel Sedykh — frontend developer. Responsive websites, React, TypeScript and JavaScript. Featured project: SHOP.CO.'
+  }
+};
+
+function App() {
+  const [lang, setLang] = React.useState<Lang>(() => { try { return localStorage.getItem('portfolio-language') === 'en' ? 'en' : 'ru'; } catch { return 'ru'; } });
+  const [open, setOpen] = React.useState(false);
+  const [active, setActive] = React.useState('');
+  const [notice, setNotice] = React.useState('');
+  const [prepared, setPrepared] = React.useState(false);
+  const menuButton = React.useRef<HTMLButtonElement>(null);
+  const navigation = React.useRef<HTMLElement>(null);
+  const progress = React.useRef<HTMLDivElement>(null);
+  const t = text[lang];
+
+  React.useEffect(() => {
+    document.documentElement.lang = lang;
+    document.title = `${t.name} — Frontend Developer`;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t.description);
+    try { localStorage.setItem('portfolio-language', lang); } catch { /* Storage is optional. */ }
+    setNotice(''); setPrepared(false);
+  }, [lang, t.name, t.description]);
+
+  React.useEffect(() => {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    let observer: IntersectionObserver | undefined;
+    if (!reduced && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.remove('reveal-pending'); observer?.unobserve(entry.target); }
+      }), {threshold: 0.08});
+      targets.forEach(el => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('reveal-pending'); observer!.observe(el); } });
+    }
+    let frame = 0;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      progress.current?.style.setProperty('transform', `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`);
+      let current = '';
+      sections.forEach(id => { if ((document.getElementById(id)?.getBoundingClientRect().top ?? Infinity) <= innerHeight * 0.35) current = id; });
+      setActive(current); frame = 0;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll); update();
+    return () => { observer?.disconnect(); targets.forEach(el => el.classList.remove('reveal-pending')); removeEventListener('scroll', onScroll); removeEventListener('resize', onScroll); cancelAnimationFrame(frame); };
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const links = navigation.current?.querySelectorAll<HTMLAnchorElement>('a');
+    links?.[0]?.focus();
+    const close = () => { setOpen(false); menuButton.current?.focus(); };
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); close(); }
+      if (event.key === 'Tab' && links?.length) {
+        const first = links[0], last = menuButton.current;
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        else if (!event.shiftKey && document.activeElement === links[links.length - 1]) { event.preventDefault(); last?.focus(); }
+        else if (event.shiftKey && document.activeElement === last) { event.preventDefault(); links[links.length - 1].focus(); }
+      }
+    };
+    const resize = () => { if (innerWidth > 760) setOpen(false); };
+    addEventListener('keydown', keydown); addEventListener('resize', resize);
+    return () => { removeEventListener('keydown', keydown); removeEventListener('resize', resize); };
+  }, [open]);
+
+  const jump = (id: string) => {
+    setOpen(false);
+    requestAnimationFrame(() => document.getElementById(id)?.focus({preventScroll:true}));
+  };
+  const copyEmail = async () => { try { await navigator.clipboard.writeText(email); setNotice(t.copied); } catch { setNotice(t.copyError); } };
+  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); const data = new FormData(event.currentTarget);
+    const subject = encodeURIComponent(`Portfolio — ${data.get('name')}`);
+    const body = encodeURIComponent(`${data.get('message')}\n\n${data.get('name')}\n${data.get('email')}`);
+    setPrepared(true); location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  };
+
+  return <>
+    <a className="skip-link" href="#main">{t.skip}</a>
+    <div className="reading-progress" ref={progress} aria-hidden="true"/>
+    <header className="site-header">
+      <div className="header-inner wrap">
+        <a className="logo" href="#top" aria-label={t.name} onClick={() => setOpen(false)}>PS<span>.</span></a>
+        <nav id="navigation" ref={navigation} className={open ? 'navigation is-open' : 'navigation'} aria-label={lang === 'ru' ? 'Основная навигация' : 'Main navigation'}>
+          {sections.map((id, i) => <a key={id} href={`#${id}`} aria-current={active === id ? 'location' : undefined} onClick={() => jump(id)}>{t.nav[i]}<span>0{i + 1}</span></a>)}
+        </nav>
+        <div className="header-actions">
+          <button className="language" aria-label={t.language} onClick={() => { setLang(lang === 'ru' ? 'en' : 'ru'); setOpen(false); }}><Globe2 size={16}/>{lang === 'ru' ? 'EN' : 'RU'}</button>
+          <a className="header-github" href="https://github.com/PavelSed33" target="_blank" rel="noreferrer" aria-label="GitHub"><Code2 size={20}/></a>
+          <button className="menu-button" ref={menuButton} aria-label={open ? t.close : t.menu} aria-controls="navigation" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button>
+        </div>
+      </div>
+    </header>
+    {open && <div className="menu-backdrop" onClick={() => { setOpen(false); menuButton.current?.focus(); }} aria-hidden="true"/>}
+    <main id="main" tabIndex={-1}>
+      <section id="top" className="hero wrap">
+        <div className="hero-copy">
+          <p className="eyebrow"><span className="status-dot"/>{t.role}</p>
+          <p className="hero-name">{t.name}</p>
+          <h1>{t.hero}<br/><em>{t.accent}</em></h1>
+          <p className="hero-intro">{t.intro}</p>
+          <div className="actions"><a className="button primary" href="#projects">{t.view}<ArrowDown size={18}/></a><a className="button secondary" href="#contact">{t.contact}<ArrowUpRight size={18}/></a></div>
+          <div className="hero-meta"><span>{t.since}</span><span>{t.location}</span></div>
+        </div>
+        <div className="portrait-scene">
+          <span className="portrait-index" aria-hidden="true">01 — FRONTEND</span>
+          <div className="portrait-frame"><img src="https://github.com/PavelSed33.png?size=640" width="640" height="640" alt={t.name} fetchPriority="high"/><div className="portrait-caption"><span>{t.first}<br/>{t.last}</span><ArrowUpRight size={30}/></div></div>
+          <div className="code-badge" aria-hidden="true"><Code2 size={22}/><span>design → code</span></div>
+          <div className="availability"><span className="status-dot"/>{t.available}</div>
+        </div>
+        <a className="hero-scroll" href="#projects"><span>{t.scroll}</span><ArrowDown size={16}/></a>
+      </section>
+      <div className="tech-strip" aria-hidden="true"><div className="wrap"><span>HTML & CSS</span><i>✳</i><span>JAVASCRIPT</span><i>✳</i><span>REACT</span><i>✳</i><span>RESPONSIVE UI</span><i>✳</i><span>TYPESCRIPT</span></div></div>
+      <section id="projects" tabIndex={-1} className="section wrap">
+        <div className="section-heading" data-reveal><p className="eyebrow">{t.projectLabel}</p><h2>{t.projectTitle}</h2></div>
+        <article className="featured-project" data-reveal>
+          <a className="project-visual" href={demo} target="_blank" rel="noreferrer" aria-label={t.preview}>
+            <div className="browser-bar" aria-hidden="true"><span className="browser-dots">● ● ●</span><span>shop.co / collection</span><ArrowUpRight size={16}/></div>
+            <div className="store-preview" aria-hidden="true">
+              <div className="store-nav"><img src={asset('type/logo.svg')} width="160" height="22" alt=""/><span>Shop　 New Arrivals　 Brands</span><span>⌕　♡</span></div>
+              <div className="store-hero"><div className="store-copy"><img src={asset('type/hero-desktop.svg')} width="577" height="173" alt=""/><p>Find your next everyday favourite.</p><span className="store-button">Shop Now →</span><div className="store-stats"><b>200+<small>Brands</small></b><b>2,000+<small>Products</small></b></div></div><img className="store-model" src={asset('hero.webp')} width="1200" height="1800" alt="" loading="lazy"/><span className="store-spark">✦</span></div>
+              <div className="store-brands">{['versace','zara','gucci','prada','calvin-klein'].map(n => <img key={n} src={asset(`brands/${n}.svg`)} alt="" loading="lazy"/>)}</div>
+              <div className="store-products">{['tape-tee','skinny-jeans','checkered-shirt','striped-tee'].map(n => <img key={n} src={asset(`${n}.webp`)} alt="" width="1000" height="1500" loading="lazy"/>)}</div>
+            </div>
+            <span className="visual-open"><ArrowUpRight size={24}/></span>
+          </a>
+          <div className="project-info"><div><p className="eyebrow">{t.projectKind}</p><h3>SHOP.CO<span>®</span></h3><p className="project-lead">{t.projectIntro}</p></div><div><p className="muted">{t.projectDescription}</p><div className="tags">{['HTML','CSS','JavaScript','localStorage'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={demo} target="_blank" rel="noreferrer">{t.live}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/shopco-ecommerce" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div></div>
+          <div className="project-details"><div><h4>{t.taskTitle}</h4><p>{t.task}</p></div><div><h4>{t.solutionTitle}</h4><p>{t.solution}</p></div><ul>{t.features.map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul></div>
+          <div className="project-footnote"><a href="https://www.figma.com/community/file/1273571982885059508/e-commerce-website-template-freebie" target="_blank" rel="noreferrer">{t.design}<ArrowUpRight size={14}/></a><span>{t.demoNote}</span></div>
+        </article>
+      </section>
+      <section id="about" tabIndex={-1} className="section wrap about-section">
+        <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>
+        <div className="about-copy" data-reveal><p>{t.about1}</p><p className="muted">{t.about2}</p><ol className="approach">{t.approach.map((item,i) => <li key={item}><span>0{i+1}</span>{item}</li>)}</ol></div>
+      </section>
+      <section id="skills" tabIndex={-1} className="section wrap"><div className="section-heading" data-reveal><p className="eyebrow">{t.skillsLabel}</p><h2>{t.skillsTitle}</h2></div><div className="skills-grid">{['HTML5','CSS3 / SCSS','JavaScript','React / TypeScript','REST API','Git / GitHub'].map((name,i) => <div className="skill" key={name} data-reveal><span className="skill-number">0{i+1}</span><h3>{name}</h3><p>{t.skills[i]}</p><ArrowUpRight className="skill-arrow" size={22}/></div>)}</div></section>
+      <section id="contact" tabIndex={-1} className="section wrap contact-section"><div data-reveal><p className="eyebrow">{t.contactLabel}</p><h2>{t.contactTitle}<br/><em>{t.contactAccent}</em></h2><p className="contact-intro muted">{t.contactText}</p><a className="text-link" href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer"><Send size={20}/>{t.telegram}<ArrowUpRight size={17}/></a><div className="email-row"><a href={`mailto:${email}`}>{email}</a><button className="icon-button" onClick={copyEmail} aria-label={t.copy}><Copy size={18}/></button></div><p className="status-message" role="status">{notice}</p></div><form onSubmit={submit} data-reveal><label htmlFor="name">{t.formName}</label><input id="name" name="name" autoComplete="name" required maxLength={100}/><label htmlFor="email">{t.formEmail}</label><input id="email" name="email" type="email" autoComplete="email" required maxLength={254}/><label htmlFor="message">{t.formMessage}</label><textarea id="message" name="message" rows={4} required maxLength={3000} placeholder={t.placeholder}/><button className="button primary" type="submit">{t.send}<ArrowUpRight size={18}/></button><p className="form-hint">{t.formHint}</p><p className="status-message" role="status">{prepared ? t.formStatus : ''}</p></form></section>
+    </main>
+    <footer className="wrap site-footer"><a className="logo" href="#top" aria-label={t.top}>PS<span>.</span></a><div><span>© {new Date().getFullYear()} {t.name}</span><small>{t.footer}</small></div><div className="footer-links"><a href="https://github.com/PavelSed33" target="_blank" rel="noreferrer">GitHub<ArrowUpRight size={14}/></a><a href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer">Telegram<ArrowUpRight size={14}/></a><a href="#top" aria-label={t.top}><ArrowUp size={20}/></a></div></footer>
+  </>;
+}
 createRoot(document.getElementById('root')!).render(<App/>);

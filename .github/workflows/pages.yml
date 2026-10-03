@@ -25,6 +25,18 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Install browser checks
+        run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - name: Verify responsive layouts and interactions
+        run: node scripts/check-responsive.mjs
+      - name: Save responsive screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-screenshots
+          path: responsive-screenshots
+          if-no-files-found: ignore
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
