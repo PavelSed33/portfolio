@@ -9,6 +9,11 @@ const demo = `${base}projects/shopco/`;
 const asset = (name: string) => `${demo}src/assets/${name}`;
 const email = 'Peresvetovec@gmail.com';
 const sections = ['projects', 'about', 'skills', 'contact'];
+const pagePath = () => {
+  const path = window.location.pathname.startsWith(base) ? window.location.pathname.slice(base.length) : window.location.pathname;
+  return path.replace(/^\\/+|\\/+$/g, '') || 'home';
+};
+const pageHref = (page = '') => base + (page ? page.replace(/^\\/+|\\/+$/g, '') + '/' : '');
 const text = {
   ru: {
     name: 'Павел Седых', first: 'Павел', last: 'Седых', nav: ['Проект', 'Обо мне', 'Навыки', 'Контакты'], skip: 'Перейти к содержимому',
@@ -68,6 +73,10 @@ function App() {
   const navigation = React.useRef<HTMLElement>(null);
   const progress = React.useRef<HTMLDivElement>(null);
   const t = text[lang];
+  const route = pagePath();
+  const isHome = route === 'home';
+  const projectRoute = route.startsWith('work/');
+  const navActive = (id: string) => id === 'projects' ? (route === 'projects' || projectRoute) : id === 'about' || id === 'skills' ? route === 'about' : route === 'contact';
 
   React.useEffect(() => {
     document.documentElement.lang = lang;
@@ -137,9 +146,9 @@ function App() {
     <div className="reading-progress" ref={progress} aria-hidden="true"/>
     <header className="site-header">
       <div className="header-inner wrap">
-        <a className="logo" href="#top" aria-label={t.name} onClick={() => setOpen(false)}>PS<span>.</span></a>
+        <a className="logo" href={pageHref()} aria-label={t.name} onClick={() => setOpen(false)}>PS<span>.</span></a>
         <nav id="navigation" ref={navigation} className={open ? 'navigation is-open' : 'navigation'} aria-label={lang === 'ru' ? 'Основная навигация' : 'Main navigation'}>
-          {sections.map((id, i) => <a key={id} href={`#${id}`} aria-current={active === id ? 'location' : undefined} onClick={() => jump(id)}>{t.nav[i]}<span>0{i + 1}</span></a>)}
+          {sections.map((id, i) => <a key={id} href={id === 'projects' ? pageHref('projects') : id === 'about' ? pageHref('about') : id === 'skills' ? `${pageHref('about')}#skills` : pageHref('contact')} aria-current={navActive(id) ? 'page' : undefined} onClick={() => setOpen(false)}>{t.nav[i]}<span>0{i + 1}</span></a>)}
         </nav>
         <div className="header-actions">
           <button className="language" aria-label={t.language} onClick={() => { setLang(lang === 'ru' ? 'en' : 'ru'); setOpen(false); }}><Globe2 size={16}/>{lang === 'ru' ? 'EN' : 'RU'}</button>
@@ -149,14 +158,14 @@ function App() {
       </div>
     </header>
     {open && <div className="menu-backdrop" onClick={() => { setOpen(false); menuButton.current?.focus(); }} aria-hidden="true"/>}
-    <main id="main" tabIndex={-1}>
-      <section id="top" className="hero wrap">
+    <main id="main" tabIndex={-1} className={projectRoute ? 'case-route' : route === 'projects' ? 'projects-route' : isHome ? 'home-route' : ''}>
+      {isHome && <><section id="top" className="hero wrap">
         <div className="hero-copy">
           <p className="eyebrow"><span className="status-dot"/>{t.role}</p>
           <p className="hero-name">{t.name}</p>
           <h1>{t.hero}<br/><em>{t.accent}</em></h1>
           <p className="hero-intro">{t.intro}</p>
-          <div className="actions"><a className="button primary" href="#projects">{t.view}<ArrowDown size={18}/></a><a className="button secondary" href="#contact">{t.contact}<ArrowUpRight size={18}/></a></div>
+          <div className="actions"><a className="button primary" href={pageHref('projects')}>{t.view}<ArrowDown size={18}/></a><a className="button secondary" href={pageHref('contact')}>{t.contact}<ArrowUpRight size={18}/></a></div>
           <div className="hero-meta"><span>{t.since}</span><span>{t.location}</span></div>
         </div>
         <div className="portrait-scene">
@@ -165,12 +174,12 @@ function App() {
           <div className="code-badge" aria-hidden="true"><Code2 size={22}/><span>design → code</span></div>
           <div className="availability"><span className="status-dot"/>{t.available}</div>
         </div>
-        <a className="hero-scroll" href="#projects"><span>{t.scroll}</span><ArrowDown size={16}/></a>
+        <a className="hero-scroll" href={pageHref('projects')}><span>{t.scroll}</span><ArrowDown size={16}/></a>
       </section>
-      <div className="tech-strip" aria-hidden="true"><div className="wrap"><span>HTML & CSS</span><i>✳</i><span>JAVASCRIPT</span><i>✳</i><span>REACT</span><i>✳</i><span>RESPONSIVE UI</span><i>✳</i><span>TYPESCRIPT</span></div></div>
-      <section id="projects" tabIndex={-1} className="section wrap">
+      <div className="tech-strip" aria-hidden="true"><div className="wrap"><span>HTML & CSS</span><i>✳</i><span>JAVASCRIPT</span><i>✳</i><span>REACT</span><i>✳</i><span>RESPONSIVE UI</span><i>✳</i><span>TYPESCRIPT</span></div></div></>}
+      {(isHome || route === 'projects' || projectRoute) && <section id="projects" tabIndex={-1} className="section wrap">
         <div className="section-heading" data-reveal><p className="eyebrow">{t.projectLabel}</p><h2>{t.projectTitle}</h2></div>
-        <article className="featured-project" data-reveal>
+        {(!projectRoute || route === 'work/shopco') && <article className="featured-project" data-reveal>
           <a className="project-visual" href={demo} target="_blank" rel="noreferrer" aria-label={t.preview}>
             <div className="browser-bar" aria-hidden="true"><span className="browser-dots">● ● ●</span><span>shop.co / collection</span><ArrowUpRight size={16}/></div>
             <div className="store-preview" aria-hidden="true">
@@ -181,17 +190,17 @@ function App() {
             </div>
             <span className="visual-open"><ArrowUpRight size={24}/></span>
           </a>
-          <div className="project-info"><div><p className="eyebrow">{t.projectKind}</p><h3>SHOP.CO</h3><p className="project-lead">{t.projectIntro}</p></div><div><p className="muted">{t.projectDescription}</p><div className="tags">{['HTML','CSS','JavaScript','localStorage'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={demo} target="_blank" rel="noreferrer">{t.live}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/portfolio/tree/main/public/projects/shopco" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div></div>
+          <div className="project-info"><div><p className="eyebrow">{t.projectKind}</p><h3><a href={pageHref('work/shopco')}>SHOP.CO</a></h3><p className="project-lead">{t.projectIntro}</p></div><div><p className="muted">{t.projectDescription}</p><div className="tags">{['HTML','CSS','JavaScript','localStorage'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={demo} target="_blank" rel="noreferrer">{t.live}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/portfolio/tree/main/public/projects/shopco" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div></div>
           <div className="project-details"><div><h4>{t.taskTitle}</h4><p>{t.task}</p></div><div><h4>{t.solutionTitle}</h4><p>{t.solution}</p></div><ul>{t.features.map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul></div>
           <div className="project-footnote"><a href="https://www.figma.com/community/file/1273571982885059508/e-commerce-website-template-freebie" target="_blank" rel="noreferrer">{t.design}<ArrowUpRight size={14}/></a><span>{t.demoNote}</span></div>
-        </article>
-        <article className="featured-project evklid-project" data-reveal>
+        </article>}
+        {(!projectRoute || route === 'work/evklid') && <article className="featured-project evklid-project" data-reveal>
           <a className="project-visual evklid-visual" href="https://pavelsed33.github.io/Evklid/" target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть сайт Евклид' : 'Open the Evklid website'}>
             <img src={`${base}evklid-preview.webp`} width="1440" height="900" alt={lang === 'ru' ? 'Первый экран сайта Евклид' : 'Evklid website homepage'} loading="lazy"/>
             <span className="visual-open"><ArrowUpRight size={24}/></span>
           </a>
           <div className="project-info">
-            <div><p className="eyebrow">{lang === 'ru' ? 'Проектные решения · Учебный проект' : 'Project solutions · Portfolio project'}</p><h3>{lang === 'ru' ? 'Евклид' : 'Evklid'}</h3><p className="project-lead">{lang === 'ru' ? 'Адаптивный сайт с работающими взаимодействиями.' : 'A responsive website with working interactions.'}</p></div>
+            <div><p className="eyebrow">{lang === 'ru' ? 'Проектные решения · Учебный проект' : 'Project solutions · Portfolio project'}</p><h3><a href={pageHref('work/evklid')}>{lang === 'ru' ? 'Евклид' : 'Evklid'}</a></h3><p className="project-lead">{lang === 'ru' ? 'Адаптивный сайт с работающими взаимодействиями.' : 'A responsive website with working interactions.'}</p></div>
             <div><p className="muted">{lang === 'ru' ? 'Сайт компании по проектным решениям. Сохранён исходный дизайн, доработаны адаптивность, поиск по странице, этапы работы, FAQ и форма заявки.' : 'A project solutions company website. The original design is preserved, with improved responsive layouts, page search, work stages, FAQ and application form.'}</p><div className="tags">{['HTML','CSS','JavaScript','Swiper'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href="https://pavelsed33.github.io/Evklid/" target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть Евклид' : 'Explore Evklid'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/Evklid" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
           </div>
           <div className="project-details">
@@ -200,15 +209,15 @@ function App() {
             <ul>{(lang === 'ru' ? ['Проверен на 8 размерах', 'Телефон в двух ориентациях', 'Управление с клавиатуры'] : ['Checked at 8 viewport sizes', 'Portrait and landscape', 'Keyboard navigation']).map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul>
           </div>
           <div className="project-footnote"><span>{lang === 'ru' ? 'Оригинальный дизайн сохранён.' : 'Original design preserved.'}</span><span>{lang === 'ru' ? 'Учебная версия: форма проверяет данные, заявки не отправляются.' : 'Portfolio demo: form data is validated, applications are not submitted.'}</span></div>
-        </article>
-        <article className="featured-project coffee-project" data-reveal>
+        </article>}
+        {(!projectRoute || route === 'work/roasted-coffee') && <article className="featured-project coffee-project" data-reveal>
           <a className="project-visual coffee-visual" href={`${base}projects/roasted-coffee/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть Roasted Coffee' : 'Open Roasted Coffee'}>
             <img src={`${base}coffee-preview.webp`} width="1440" height="800" alt={lang === 'ru' ? 'Кофе и кофейные зёрна — Roasted Coffee' : 'Coffee and coffee beans — Roasted Coffee'} loading="lazy"/>
             <span className="coffee-preview-title" aria-hidden="true">Roasted coffee<br/>best choice</span>
             <span className="visual-open"><ArrowUpRight size={24}/></span>
           </a>
           <div className="project-info">
-            <div><p className="eyebrow">{lang === 'ru' ? 'Кофейный магазин · Учебный проект' : 'Coffee storefront · Portfolio project'}</p><h3>Roasted Coffee</h3><p className="project-lead">{lang === 'ru' ? 'Тёмный интерфейс кофейного магазина.' : 'A dark coffee storefront interface.'}</p></div>
+            <div><p className="eyebrow">{lang === 'ru' ? 'Кофейный магазин · Учебный проект' : 'Coffee storefront · Portfolio project'}</p><h3><a href={pageHref('work/roasted-coffee')}>Roasted Coffee</a></h3><p className="project-lead">{lang === 'ru' ? 'Тёмный интерфейс кофейного магазина.' : 'A dark coffee storefront interface.'}</p></div>
             <div><p className="muted">{lang === 'ru' ? 'Статичная HTML/CSS-верстка трёх страниц: главной с каталогом, карточки кофе и корзины. Акцент на визуальной подаче продукта, фотографиях и типографике.' : 'Static HTML/CSS layouts for three pages: a homepage with a catalogue, a coffee product page and a cart. Focused on product presentation, photography and typography.'}</p><div className="tags">{['HTML','CSS','Multi-page'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href={`${base}projects/roasted-coffee/`} target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть сайт' : 'Explore the site'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/Roasted-coffee" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
           </div>
           <div className="project-details">
@@ -217,16 +226,16 @@ function App() {
             <ul>{(lang === 'ru' ? ['3 HTML-страницы', 'Каталог и карточка кофе', 'Единые стили CSS'] : ['3 HTML pages', 'Catalogue and product page', 'Shared CSS styles']).map(f => <li key={f}><Check size={17}/>{f}</li>)}</ul>
           </div>
           <div className="project-footnote"><span>Roasted Coffee · HTML / CSS</span><span>{lang === 'ru' ? 'Статичная демонстрация. Добавление в корзину и оплата не подключены.' : 'Static demo. Cart updates and payments are not connected.'}</span></div>
-        </article>
-      </section>
-      <section id="about" tabIndex={-1} className="section wrap about-section">
+        </article>}
+      </section>}
+      {route === 'about' && <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>
         <div className="about-copy" data-reveal><p>{t.about1}</p><p className="muted">{t.about2}</p><ol className="approach">{t.approach.map((item,i) => <li key={item}><span>0{i+1}</span>{item}</li>)}</ol></div>
-      </section>
-      <section id="skills" tabIndex={-1} className="section wrap"><div className="section-heading" data-reveal><p className="eyebrow">{t.skillsLabel}</p><h2>{t.skillsTitle}</h2></div><div className="skills-grid">{['HTML5','CSS3 / SCSS','JavaScript','React / TypeScript','REST API','Git / GitHub'].map((name,i) => <div className="skill" key={name} data-reveal><span className="skill-number">0{i+1}</span><h3>{name}</h3><p>{t.skills[i]}</p><ArrowUpRight className="skill-arrow" size={22}/></div>)}</div></section>
-      <section id="contact" tabIndex={-1} className="section wrap contact-section"><div data-reveal><p className="eyebrow">{t.contactLabel}</p><h2>{t.contactTitle}<br/><em>{t.contactAccent}</em></h2><p className="contact-intro muted">{t.contactText}</p><a className="text-link" href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer"><Send size={20}/>{t.telegram}<ArrowUpRight size={17}/></a><div className="email-row"><a href={`mailto:${email}`}>{email}</a><button className="icon-button" onClick={copyEmail} aria-label={t.copy}><Copy size={18}/></button></div><p className="status-message" role="status">{notice}</p></div><form onSubmit={submit} data-reveal><label htmlFor="name">{t.formName}</label><input id="name" name="name" autoComplete="name" required maxLength={100}/><label htmlFor="email">{t.formEmail}</label><input id="email" name="email" type="email" autoComplete="email" required maxLength={254}/><label htmlFor="message">{t.formMessage}</label><textarea id="message" name="message" rows={4} required maxLength={3000} placeholder={t.placeholder}/><button className="button primary" type="submit">{t.send}<ArrowUpRight size={18}/></button><p className="form-hint">{t.formHint}</p><p className="status-message" role="status">{prepared ? t.formStatus : ''}</p></form></section>
+      </section>}
+      {route === 'about' && <section id="skills" tabIndex={-1} className="section wrap"><div className="section-heading" data-reveal><p className="eyebrow">{t.skillsLabel}</p><h2>{t.skillsTitle}</h2></div><div className="skills-grid">{['HTML5','CSS3 / SCSS','JavaScript','React / TypeScript','REST API','Git / GitHub'].map((name,i) => <div className="skill" key={name} data-reveal><span className="skill-number">0{i+1}</span><h3>{name}</h3><p>{t.skills[i]}</p><ArrowUpRight className="skill-arrow" size={22}/></div>)}</div></section>}
+      {route === 'contact' && <section id="contact" tabIndex={-1} className="section wrap contact-section"><div data-reveal><p className="eyebrow">{t.contactLabel}</p><h2>{t.contactTitle}<br/><em>{t.contactAccent}</em></h2><p className="contact-intro muted">{t.contactText}</p><a className="text-link" href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer"><Send size={20}/>{t.telegram}<ArrowUpRight size={17}/></a><div className="email-row"><a href={`mailto:${email}`}>{email}</a><button className="icon-button" onClick={copyEmail} aria-label={t.copy}><Copy size={18}/></button></div><p className="status-message" role="status">{notice}</p></div><form onSubmit={submit} data-reveal><label htmlFor="name">{t.formName}</label><input id="name" name="name" autoComplete="name" required maxLength={100}/><label htmlFor="email">{t.formEmail}</label><input id="email" name="email" type="email" autoComplete="email" required maxLength={254}/><label htmlFor="message">{t.formMessage}</label><textarea id="message" name="message" rows={4} required maxLength={3000} placeholder={t.placeholder}/><button className="button primary" type="submit">{t.send}<ArrowUpRight size={18}/></button><p className="form-hint">{t.formHint}</p><p className="status-message" role="status">{prepared ? t.formStatus : ''}</p></form></section>}
     </main>
-    <footer className="wrap site-footer"><a className="logo" href="#top" aria-label={t.top}>PS<span>.</span></a><div><span>© {new Date().getFullYear()} {t.name}</span><small>{t.footer}</small></div><div className="footer-links"><a href="https://github.com/PavelSed33" target="_blank" rel="noreferrer">GitHub<ArrowUpRight size={14}/></a><a href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer">Telegram<ArrowUpRight size={14}/></a><a href="#top" aria-label={t.top}><ArrowUp size={20}/></a></div></footer>
+    <footer className="wrap site-footer"><a className="logo" href={pageHref()} aria-label={t.top}>PS<span>.</span></a><div><span>© {new Date().getFullYear()} {t.name}</span><small>{t.footer}</small></div><div className="footer-links"><a href="https://github.com/PavelSed33" target="_blank" rel="noreferrer">GitHub<ArrowUpRight size={14}/></a><a href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer">Telegram<ArrowUpRight size={14}/></a><a href={isHome ? '#top' : pageHref()} aria-label={t.top}><ArrowUp size={20}/></a></div></footer>
   </>;
 }
 createRoot(document.getElementById('root')!).render(<App/>);
