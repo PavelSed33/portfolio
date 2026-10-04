@@ -51,21 +51,21 @@ try{
   }
 
   const about=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
-  await about.goto('http://127.0.0.1:4173/portfolio/about/',{waitUntil:'networkidle'});
+  await about.goto(previewUrl+'about/',{waitUntil:'networkidle'});
   assert.equal(await about.locator('#about').count(),1);
   assert.equal(await about.locator('#skills').count(),0);
   assert.equal(await about.locator(`a[href="${basePath}about/"][aria-current="page"]`).count(),1);
   await about.close();
 
   const skills=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
-  await skills.goto('http://127.0.0.1:4173/portfolio/skills/',{waitUntil:'networkidle'});
+  await skills.goto(previewUrl+'skills/',{waitUntil:'networkidle'});
   assert.equal(await skills.locator('#about').count(),0);
   assert.equal(await skills.locator('#skills').count(),1);
   assert.equal(await skills.locator(`a[href="${basePath}skills/"][aria-current="page"]`).count(),1);
   await skills.close();
 
   const projects=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
-  await projects.goto('http://127.0.0.1:4173/portfolio/projects/',{waitUntil:'networkidle'});
+  await projects.goto(previewUrl+'projects/',{waitUntil:'networkidle'});
   assert.equal(await projects.locator('.featured-project').count(),6);
   assert.equal(await projects.locator('.project-pagination a[aria-current="page"]').textContent(),'1');
   assert.equal(await projects.locator('.project-pagination a').count(),1);
@@ -77,7 +77,7 @@ try{
   await projects.close();
 
   const contact=await browser.newPage({viewport:{width:320,height:740},reducedMotion:'reduce'});
-  await contact.goto('http://127.0.0.1:4173/portfolio/contact/',{waitUntil:'networkidle'});
+  await contact.goto(previewUrl+'contact/',{waitUntil:'networkidle'});
   assert.equal(await contact.locator('#contact form, #contact input, #contact textarea').count(),0);
   assert.equal(await contact.locator('#contact a[href="https://t.me/Peresvetovec"]').count(),1);
   assert.equal(await contact.locator('#contact a[href="mailto:Peresvetovec@gmail.com"]').count(),1);
