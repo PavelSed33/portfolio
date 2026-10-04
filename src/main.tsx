@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {ArrowUpRight, ArrowDown, ArrowUp, Check, Mail, Code2, ExternalLink, Globe2, Menu, Send, X} from 'lucide-react';
 import './style.css';
 import {ProjectPages} from './ProjectPages';
+import {HomeIntro, HomeSections} from './Home';
 
 type Lang = 'ru' | 'en';
 const base = import.meta.env.BASE_URL;
@@ -18,7 +19,7 @@ const pagePath = () => {
 const pageHref = (page = '') => base + (page ? cleanPath(page) + '/' : '');
 const text = {
   ru: {
-    name: 'Павел Седых', first: 'Павел', last: 'Седых', nav: ['Проект', 'Обо мне', 'Навыки', 'Контакты'], skip: 'Перейти к содержимому',
+    name: 'Павел Седых', first: 'Павел', last: 'Седых', nav: ['Проекты', 'Обо мне', 'Навыки', 'Контакты'], skip: 'Перейти к содержимому',
     role: 'FRONTEND РАЗРАБОТЧИК', available: 'Открыт к сотрудничеству', hero: 'Идеи становятся', accent: 'интерфейсами.',
     intro: 'Создаю сайты, которые приятно смотреть и удобно использовать. От первого экрана до последнего взаимодействия.',
     view: 'Смотреть проект', contact: 'Обсудить задачу', since: 'В разработке с 2021', location: 'Работаю удалённо', scroll: 'Дальше — моя работа',
@@ -40,7 +41,7 @@ const text = {
     description: 'Павел Седых — frontend-разработчик. Адаптивные сайты, React, TypeScript и JavaScript. Избранный проект SHOP.CO.'
   },
   en: {
-    name: 'Pavel Sedykh', first: 'Pavel', last: 'Sedykh', nav: ['Project', 'About', 'Skills', 'Contact'], skip: 'Skip to content',
+    name: 'Pavel Sedykh', first: 'Pavel', last: 'Sedykh', nav: ['Projects', 'About', 'Skills', 'Contact'], skip: 'Skip to content',
     role: 'FRONTEND DEVELOPER', available: 'Open to collaboration', hero: 'Turning ideas into', accent: 'interfaces.',
     intro: 'I build websites that look considered and feel easy to use. From the first screen to the final interaction.',
     view: 'Explore my work', contact: 'Let’s talk', since: 'Developing since 2021', location: 'Working remotely', scroll: 'Discover my work',
@@ -150,27 +151,10 @@ function App() {
     </header>
     {open && <div className="menu-backdrop" onClick={() => { setOpen(false); menuButton.current?.focus(); }} aria-hidden="true"/>}
     <main id="main" tabIndex={-1} className={projectRoute ? 'case-route' : route === 'projects' ? 'projects-route' : isHome ? 'home-route' : ''}>
-      {isHome && <><section id="top" className="hero wrap">
-        <div className="hero-copy">
-          <p className="eyebrow"><span className="status-dot"/>{t.role}</p>
-          <p className="hero-name">{t.name}</p>
-          <h1>{t.hero}<br/><em>{t.accent}</em></h1>
-          <p className="hero-intro">{t.intro}</p>
-          <div className="actions"><a className="button primary" href={pageHref('projects')}>{t.view}<ArrowDown size={18}/></a><a className="button secondary" href={pageHref('contact')}>{t.contact}<ArrowUpRight size={18}/></a></div>
-          <div className="hero-meta"><span>{t.since}</span><span>{t.location}</span></div>
-        </div>
-        <div className="portrait-scene">
-          <span className="portrait-index" aria-hidden="true">01 — FRONTEND</span>
-          <div className="portrait-frame"><img src="https://github.com/PavelSed33.png?size=640" width="640" height="640" alt={t.name} fetchPriority="high"/><div className="portrait-caption"><span>{t.first}<br/>{t.last}</span><ArrowUpRight size={30}/></div></div>
-          <div className="code-badge" aria-hidden="true"><Code2 size={22}/><span>design → code</span></div>
-          <div className="availability"><span className="status-dot"/>{t.available}</div>
-        </div>
-        <a className="hero-scroll" href={pageHref('projects')}><span>{t.scroll}</span><ArrowDown size={16}/></a>
-      </section>
-      <div className="tech-strip" aria-hidden="true"><div className="wrap"><span>HTML & CSS</span><i>✳</i><span>JAVASCRIPT</span><i>✳</i><span>REACT</span><i>✳</i><span>RESPONSIVE UI</span><i>✳</i><span>TYPESCRIPT</span></div></div></>}
+      {isHome && <HomeIntro lang={lang}/>}
       {(isHome || route === 'projects' || projectRoute) && <section id="projects" tabIndex={-1} className="section wrap">
-        <div className="section-heading" data-reveal><p className="eyebrow">{t.projectLabel}</p><h2>{t.projectTitle}</h2></div>
-        <ProjectPages enabled={!projectRoute} lang={lang}>
+        <div className="section-heading" data-reveal><div>{projectRoute && <a className="case-back" href={pageHref('projects')}>← {lang === 'ru' ? 'Все проекты' : 'All projects'}</a>}<p className="eyebrow">{t.projectLabel}</p><h2>{t.projectTitle}</h2></div>{isHome && <p className="selected-intro">{lang === 'ru' ? 'Три проекта, в которых можно посмотреть верстку и попробовать интерфейс в деле. Все работы — учебные.' : 'Three projects to explore the layouts and try the interfaces. All are portfolio demonstrations.'}</p>}</div>
+        <ProjectPages enabled={route === 'projects'} lang={lang}>
         {(!projectRoute || route === 'work/shopco') && <article className="featured-project" data-reveal>
           <a className="project-visual" href={demo} target="_blank" rel="noreferrer" aria-label={t.preview}>
             <div className="browser-bar" aria-hidden="true"><span className="browser-dots">● ● ●</span><span>shop.co / collection</span><ArrowUpRight size={16}/></div>
@@ -202,7 +186,7 @@ function App() {
           </div>
           <div className="project-footnote"><span>{lang === 'ru' ? 'Оригинальный дизайн сохранён.' : 'Original design preserved.'}</span><span>{lang === 'ru' ? 'Учебная версия: форма проверяет данные, заявки не отправляются.' : 'Portfolio demo: form data is validated, applications are not submitted.'}</span></div>
         </article>}
-        {(!projectRoute || route === 'work/roasted-coffee') && <article className="featured-project coffee-project" data-reveal>
+        {((!isHome && !projectRoute) || route === 'work/roasted-coffee') && <article className="featured-project coffee-project" data-reveal>
           <a className="project-visual coffee-visual" href={`${base}projects/roasted-coffee/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть Roasted Coffee' : 'Open Roasted Coffee'}>
             <img src={`${base}coffee-preview.webp`} width="1440" height="800" alt={lang === 'ru' ? 'Кофе и кофейные зёрна — Roasted Coffee' : 'Coffee and coffee beans — Roasted Coffee'} loading="lazy"/>
             <span className="coffee-preview-title" aria-hidden="true">Roasted coffee<br/>best choice</span>
@@ -219,7 +203,7 @@ function App() {
           </div>
           <div className="project-footnote"><span>Roasted Coffee · HTML / CSS</span><span>{lang === 'ru' ? 'Статичная демонстрация. Добавление в корзину и оплата не подключены.' : 'Static demo. Cart updates and payments are not connected.'}</span></div>
         </article>}
-        {(!projectRoute || route === 'work/tea') && <article className="featured-project tea-project" data-reveal>
+        {((!isHome && !projectRoute) || route === 'work/tea') && <article className="featured-project tea-project" data-reveal>
           <a className="project-visual coffee-visual" href={`${base}projects/tea/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть Tea — TealuxE' : 'Open Tea — TealuxE'}>
             <img src={`${base}projects/tea/images/top-bg.jpeg`} width="1599" height="500" alt={lang === 'ru' ? 'Зелёные чайные плантации — TealuxE' : 'Green tea plantations — TealuxE'} loading="lazy"/>
             <span className="coffee-preview-title" aria-hidden="true">TealuxE</span>
@@ -231,7 +215,7 @@ function App() {
           </div>
           <div className="project-footnote"><span>TealuxE · HTML / CSS / JavaScript</span><span>{lang === 'ru' ? 'Демонстрация верстки. Покупки, поиск и рассылка не подключены.' : 'Layout demo. Shopping, search and newsletter delivery are not connected.'}</span></div>
         </article>}
-        {(!projectRoute || route === 'work/elegance-shop') && <article className="featured-project elegance-project" data-reveal>
+        {((!isHome && !projectRoute) || route === 'work/elegance-shop') && <article className="featured-project elegance-project" data-reveal>
           <a className="project-visual coffee-visual" href={`${base}projects/elegance-shop/`} target="_blank" rel="noreferrer" aria-label={lang === 'ru' ? 'Открыть EleganceShop' : 'Open EleganceShop'}>
             <img src={`${base}projects/elegance-shop/img/header/photo.jpg`} width="670" height="737" alt={lang === 'ru' ? 'Летняя коллекция одежды — EleganceShop' : 'Summer clothing collection — EleganceShop'} loading="lazy"/>
             <span className="coffee-preview-title" aria-hidden="true">Elegance</span>
@@ -253,10 +237,13 @@ function App() {
             <div><p className="eyebrow">{lang === 'ru' ? 'Мебельный магазин · Учебный проект' : 'Furniture storefront · Portfolio project'}</p><h3><a href={pageHref('work/sitdownpls')}>SitDownPls</a></h3><p className="project-lead">{lang === 'ru' ? 'Многостраничный сайт магазина мебели.' : 'A multipage furniture storefront.'}</p></div>
             <div><p className="muted">{lang === 'ru' ? 'Главная, каталог, карточка товара и страница сотрудничества. В проекте реализованы слайдеры, галерея товара, модальные окна и проверка полей формы.' : 'Homepage, catalogue, product page and a partnership page. The project includes sliders, a product gallery, modal windows and form validation.'}</p><div className="tags">{['HTML','CSS','JavaScript','Swiper','jQuery'].map(s => <span key={s}>{s}</span>)}</div><div className="actions"><a className="button primary" href="https://pavelsed33.github.io/sitDownPls/" target="_blank" rel="noreferrer">{lang === 'ru' ? 'Открыть сайт' : 'Explore the site'}<ExternalLink size={17}/></a><a className="button secondary" href="https://github.com/PavelSed33/sitDownPls" target="_blank" rel="noreferrer"><Code2 size={17}/>{t.code}</a></div></div>
           </div>
+          <div className="project-details"><div><h4>{t.taskTitle}</h4><p>{lang === 'ru' ? 'Собрать страницы мебельного магазина и связать каталог с карточкой товара.' : 'Build a furniture storefront and connect the catalogue to a product page.'}</p></div><div><h4>{t.solutionTitle}</h4><p>{lang === 'ru' ? 'Четыре страницы, галерея изображений, слайдеры, модальные окна и проверка полей формы.' : 'Four pages, an image gallery, sliders, modal windows and form validation.'}</p></div><ul>{(lang === 'ru' ? ['Главная и каталог', 'Карточка товара', 'Страница сотрудничества'] : ['Homepage and catalogue', 'Product page', 'Partnership page']).map(f=><li key={f}><Check size={17}/>{f}</li>)}</ul></div>
           <div className="project-footnote"><span>{lang === 'ru' ? '4 страницы · Мебель и интерьер' : '4 pages · Furniture and interiors'}</span><span>{lang === 'ru' ? 'Учебная демонстрация интерфейса магазина.' : 'Portfolio demonstration of a storefront interface.'}</span></div>
         </article>}
         </ProjectPages>
+        {isHome && <a className="button secondary all-projects-link" href={pageHref('projects')}>{lang === 'ru' ? 'Все проекты' : 'All projects'}<ArrowUpRight size={18}/></a>}
       </section>}
+      {isHome && <HomeSections lang={lang}/>}
       {route === 'about' && <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>
         <div className="about-copy" data-reveal><p>{t.about1}</p><p className="muted">{t.about2}</p><ol className="approach">{t.approach.map((item,i) => <li key={item}><span>0{i+1}</span>{item}</li>)}</ol></div>

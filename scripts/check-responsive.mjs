@@ -29,13 +29,18 @@ try{
     await page.close();
   }
 
-  for(const [width,height] of [[320,740],[768,1024],[1440,900],[1920,1080]]){
+  for(const [width,height] of [[320,740],[390,844],[844,390],[768,1024],[1024,768],[1440,900],[1920,1080]]){
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
     await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
-    assert.equal(await page.locator('.featured-project').count(),6);
-    if(width>=1100){
-      const cardWidth=await page.locator('.featured-project').first().evaluate(el=>el.getBoundingClientRect().width);
-      assert(cardWidth<360,`Project card too large at ${width}: ${cardWidth}`);
+    assert.equal(await page.locator('.featured-project').count(),3);
+    assert.equal(await page.locator('.service-card').count(),4);
+    assert.equal(await page.locator('.process-list li').count(),4);
+    assert.equal(await page.locator('form').count(),0);
+    await page.locator('img').evaluateAll(imgs=>imgs.forEach(img=>img.loading='eager'));
+    await page.evaluate(()=>Promise.all([...document.images].map(img=>img.decode().catch(()=>{}))));
+    assert.equal(await page.locator('img[src^="/portfolio/"]').evaluateAll(imgs=>imgs.filter(img=>!img.naturalWidth).length),0,'Broken local image');
+    if(width<=760){
+      assert(!(await page.locator('.footer-back-top').isVisible()));
     }
     const size=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
     assert(size.document<=size.viewport+1,`Home overflow at ${width}`);
