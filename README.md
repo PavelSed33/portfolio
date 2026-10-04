@@ -15,7 +15,13 @@ https://www.figma.com/community/file/1273571982885059508/e-commerce-website-temp
 
 ## Публикация
 
-В Settings → Pages выберите GitHub Actions. Workflow `.github/workflows/pages.yml` соберёт проект и опубликует `dist/` после изменения main. Первую публикацию можно запустить вручную во вкладке Actions → Deploy portfolio → Run workflow.
+Обычная сборка `npm run build` теперь рассчитана на публикацию в корне домена (`/`). После сборки загрузите содержимое папки `dist/` в корневую папку сайта на сервере.
+
+Если сайт должен находиться в подпапке, укажите базовый путь при сборке, например: `VITE_BASE_PATH=/portfolio/ npm run build`.
+
+Для GitHub Pages ничего менять не нужно: workflow `.github/workflows/pages.yml` автоматически задаёт `VITE_BASE_PATH=/portfolio/`, собирает проект и публикует `dist/` после изменения `main`. Первую публикацию можно запустить вручную во вкладке Actions → Deploy portfolio → Run workflow.
+
+`canonical` и абсолютный `og:url` не зафиксированы в исходниках, чтобы сборка не указывала на чужой домен после переноса. Когда будет известен постоянный домен, их можно добавить уже под него.
 
 ## Интерфейс портфолио
 
@@ -31,7 +37,7 @@ https://www.figma.com/community/file/1273571982885059508/e-commerce-website-temp
 
 Workflow проверяет сборку и запускает Chromium: ширины 320, 390, 768, 1440 и 1920 px, телефон в альбомной ориентации, горизонтальное переполнение, язык, меню и reduced motion. Скриншоты сохраняются в артефакт `responsive-screenshots` в GitHub Actions. Это эмуляция размеров экрана; проверка на реальных iOS/Android устройствах остаётся полезной.
 
-Локальный запуск проверок (после сборки): `npm install --no-save --package-lock=false playwright@1.62.1`, `npx playwright install chromium`, `node scripts/check-responsive.mjs`.
+Локальный запуск проверок (после сборки): `npm install --no-save --package-lock=false playwright@1.62.1`, `npx playwright install chromium`, `node scripts/check-responsive.mjs`. Для сборки в подпапку задайте тот же `VITE_BASE_PATH` и при проверке.
 
 ## Евклид
 
