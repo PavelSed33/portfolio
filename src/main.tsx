@@ -1,6 +1,6 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {ArrowUpRight, ArrowDown, ArrowUp, Check, Copy, Code2, ExternalLink, Globe2, Menu, Send, X} from 'lucide-react';
+import {ArrowUpRight, ArrowDown, ArrowUp, Check, Mail, Code2, ExternalLink, Globe2, Menu, Send, X} from 'lucide-react';
 import './style.css';
 import {ProjectPages} from './ProjectPages';
 
@@ -36,7 +36,6 @@ const text = {
     skills: ['Семантика и доступность', 'Сетки, адаптивность, анимации', 'Логика и взаимодействия', 'Компоненты и типизация', 'Данные и интеграции', 'История изменений и публикация'],
     contactLabel: '04 / КОНТАКТЫ', contactTitle: 'Давайте сделаем', contactAccent: 'что-то хорошее.', contactText: 'Расскажите о задаче или просто напишите. Открыт к проектам и предложениям по frontend-разработке.',
     telegram: 'Написать в Telegram', copy: 'Скопировать email', copied: 'Email скопирован', copyError: 'Не удалось скопировать. Email можно выделить вручную.',
-    formName: 'Ваше имя', formEmail: 'Ваш email', formMessage: 'О задаче', placeholder: 'Что хотите сделать? Сроки, идея, ссылка на макет…', send: 'Подготовить письмо', formHint: 'Кнопка откроет вашу почтовую программу с готовым текстом.', formStatus: 'Письмо подготовлено. Если почтовая программа не открылась, напишите в Telegram или скопируйте email.',
     top: 'Наверх', menu: 'Открыть меню', close: 'Закрыть меню', language: 'Switch to English', footer: 'Сделано с вниманием к деталям.',
     description: 'Павел Седых — frontend-разработчик. Адаптивные сайты, React, TypeScript и JavaScript. Избранный проект SHOP.CO.'
   },
@@ -59,7 +58,6 @@ const text = {
     skills: ['Semantics and accessibility', 'Layouts, responsiveness and motion', 'Logic and interactions', 'Components and type safety', 'Data and integrations', 'Version control and publishing'],
     contactLabel: '04 / CONTACT', contactTitle: 'Let’s build', contactAccent: 'something good.', contactText: 'Tell me about your idea, or just say hello. Available for projects and frontend development opportunities.',
     telegram: 'Message on Telegram', copy: 'Copy email', copied: 'Email copied', copyError: 'Could not copy. You can select the email address manually.',
-    formName: 'Your name', formEmail: 'Your email', formMessage: 'Your idea', placeholder: 'What would you like to build? An idea, timeframe, design link…', send: 'Prepare an email', formHint: 'This opens your email application with a prepared message.', formStatus: 'Your email is ready. If your email app did not open, use Telegram or copy the email address.',
     top: 'Back to top', menu: 'Open menu', close: 'Close menu', language: 'Переключить на русский', footer: 'Built with care for the details.',
     description: 'Pavel Sedykh — frontend developer. Responsive websites, React, TypeScript and JavaScript. Featured project: SHOP.CO.'
   }
@@ -69,8 +67,6 @@ function App() {
   const [lang, setLang] = React.useState<Lang>(() => { try { return localStorage.getItem('portfolio-language') === 'en' ? 'en' : 'ru'; } catch { return 'ru'; } });
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState('');
-  const [notice, setNotice] = React.useState('');
-  const [prepared, setPrepared] = React.useState(false);
   const menuButton = React.useRef<HTMLButtonElement>(null);
   const navigation = React.useRef<HTMLElement>(null);
   const progress = React.useRef<HTMLDivElement>(null);
@@ -85,7 +81,6 @@ function App() {
     document.title = `${t.name} — Frontend Developer`;
     document.querySelector('meta[name="description"]')?.setAttribute('content', t.description);
     try { localStorage.setItem('portfolio-language', lang); } catch { /* Storage is optional. */ }
-    setNotice(''); setPrepared(false);
   }, [lang, t.name, t.description]);
 
   React.useEffect(() => {
@@ -135,13 +130,7 @@ function App() {
     setOpen(false);
     requestAnimationFrame(() => document.getElementById(id)?.focus({preventScroll:true}));
   };
-  const copyEmail = async () => { try { await navigator.clipboard.writeText(email); setNotice(t.copied); } catch { setNotice(t.copyError); } };
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); const data = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(`Portfolio — ${data.get('name')}`);
-    const body = encodeURIComponent(`${data.get('message')}\n\n${data.get('name')}\n${data.get('email')}`);
-    setPrepared(true); location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-  };
+
 
   return <>
     <a className="skip-link" href="#main">{t.skip}</a>
@@ -273,7 +262,19 @@ function App() {
         <div className="about-copy" data-reveal><p>{t.about1}</p><p className="muted">{t.about2}</p><ol className="approach">{t.approach.map((item,i) => <li key={item}><span>0{i+1}</span>{item}</li>)}</ol></div>
       </section>}
       {route === 'skills' && <section id="skills" tabIndex={-1} className="section wrap"><div className="section-heading" data-reveal><p className="eyebrow">{t.skillsLabel}</p><h2>{t.skillsTitle}</h2></div><div className="skills-grid">{['HTML5','CSS3 / SCSS','JavaScript','React / TypeScript','REST API','Git / GitHub'].map((name,i) => <div className="skill" key={name} data-reveal><span className="skill-number">0{i+1}</span><h3>{name}</h3><p>{t.skills[i]}</p><ArrowUpRight className="skill-arrow" size={22}/></div>)}</div></section>}
-      {route === 'contact' && <section id="contact" tabIndex={-1} className="section wrap contact-section"><div data-reveal><p className="eyebrow">{t.contactLabel}</p><h2>{t.contactTitle}<br/><em>{t.contactAccent}</em></h2><p className="contact-intro muted">{t.contactText}</p><a className="text-link" href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer"><Send size={20}/>{t.telegram}<ArrowUpRight size={17}/></a><div className="email-row"><a href={`mailto:${email}`}>{email}</a><button className="icon-button" onClick={copyEmail} aria-label={t.copy}><Copy size={18}/></button></div><p className="status-message" role="status">{notice}</p></div><form onSubmit={submit} data-reveal><label htmlFor="name">{t.formName}</label><input id="name" name="name" autoComplete="name" required maxLength={100}/><label htmlFor="email">{t.formEmail}</label><input id="email" name="email" type="email" autoComplete="email" required maxLength={254}/><label htmlFor="message">{t.formMessage}</label><textarea id="message" name="message" rows={4} required maxLength={3000} placeholder={t.placeholder}/><button className="button primary" type="submit">{t.send}<ArrowUpRight size={18}/></button><p className="form-hint">{t.formHint}</p><p className="status-message" role="status">{prepared ? t.formStatus : ''}</p></form></section>}
+      {route === 'contact' && <section id="contact" tabIndex={-1} className="section wrap contact-section">
+        <div data-reveal>
+          <p className="eyebrow">{t.contactLabel}</p>
+          <h2>{t.contactTitle}<br/><em>{t.contactAccent}</em></h2>
+          <p className="contact-intro muted">{t.contactText}</p>
+          <div className="actions contact-actions">
+            <a className="button primary" href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer"><Send size={20}/>{t.telegram}<ArrowUpRight size={17}/></a>
+            <a className="button secondary" href={`mailto:${email}`}><Mail size={20}/>{lang === 'ru' ? 'Написать на почту' : 'Send an email'}<ArrowUpRight size={17}/></a>
+          </div>
+          <p className="contact-address">{email}</p>
+        </div>
+      </section>}
+
     </main>
     <footer className="wrap site-footer"><a className="logo" href={pageHref()} aria-label={t.top}>PS<span>.</span></a><div><span>© {new Date().getFullYear()} {t.name}</span><small>{t.footer}</small></div><div className="footer-links"><a href="https://github.com/PavelSed33" target="_blank" rel="noreferrer" aria-label="GitHub" title="GitHub"><svg className="social-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.2.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6A4.7 4.7 0 0 1 5.8 7c-.1-.3-.6-1.6.1-3.3 0 0 1-.3 3.6 1.2a12.2 12.2 0 0 1 6.5 0c2.5-1.5 3.6-1.2 3.6-1.2.7 1.7.3 3 .1 3.3a4.7 4.7 0 0 1 1.3 3.3c0 4.7-2.9 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"/></svg></a><a href="https://t.me/Peresvetovec" target="_blank" rel="noreferrer" aria-label="Telegram" title="Telegram"><svg className="telegram-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.7 3.4 18.5 19c-.2 1.1-.9 1.4-1.8.9l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9-8.1c.4-.4-.1-.6-.6-.2L6 12.8l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.2 2.6c.9-.3 1.7.2 1.5.8Z"/></svg></a><a href={isHome ? '#top' : pageHref()} aria-label={t.top}><ArrowUp size={20}/></a></div></footer>
   </>;

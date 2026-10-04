@@ -69,6 +69,15 @@ try{
   assert.equal(await projects.locator('html').getAttribute('lang'),'en');
   await projects.close();
 
+  const contact=await browser.newPage({viewport:{width:320,height:740},reducedMotion:'reduce'});
+  await contact.goto('http://127.0.0.1:4173/portfolio/contact/',{waitUntil:'networkidle'});
+  assert.equal(await contact.locator('#contact form, #contact input, #contact textarea').count(),0);
+  assert.equal(await contact.locator('#contact a[href="https://t.me/Peresvetovec"]').count(),1);
+  assert.equal(await contact.locator('#contact a[href="mailto:Peresvetovec@gmail.com"]').count(),1);
+  assert(await contact.locator('#contact .contact-actions').isVisible());
+  assert(await contact.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+  await contact.close();
+
   const mobile=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
   await mobile.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
   await mobile.getByRole('button',{name:'Открыть меню',exact:true}).click();
