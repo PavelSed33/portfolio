@@ -1,3 +1,4 @@
+import './check-pagination.mjs';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
@@ -59,6 +60,8 @@ try{
   const projects=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
   await projects.goto('http://127.0.0.1:4173/portfolio/projects/',{waitUntil:'networkidle'});
   assert.equal(await projects.locator('.featured-project').count(),6);
+  assert.equal(await projects.locator('.project-pagination a[aria-current="page"]').textContent(),'1');
+  assert.equal(await projects.locator('.project-pagination a').count(),1);
   assert.equal(await projects.locator('a[href="/portfolio/work/shopco/"]').count(),1);
   await projects.getByRole('button',{name:'Switch to English',exact:true}).click();
   assert.equal(await projects.locator('html').getAttribute('lang'),'en');

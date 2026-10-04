@@ -2,6 +2,7 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {ArrowUpRight, ArrowDown, ArrowUp, Check, Copy, Code2, ExternalLink, Globe2, Menu, Send, X} from 'lucide-react';
 import './style.css';
+import {ProjectPages} from './ProjectPages';
 
 type Lang = 'ru' | 'en';
 const base = import.meta.env.BASE_URL;
@@ -180,6 +181,7 @@ function App() {
       <div className="tech-strip" aria-hidden="true"><div className="wrap"><span>HTML & CSS</span><i>✳</i><span>JAVASCRIPT</span><i>✳</i><span>REACT</span><i>✳</i><span>RESPONSIVE UI</span><i>✳</i><span>TYPESCRIPT</span></div></div></>}
       {(isHome || route === 'projects' || projectRoute) && <section id="projects" tabIndex={-1} className="section wrap">
         <div className="section-heading" data-reveal><p className="eyebrow">{t.projectLabel}</p><h2>{t.projectTitle}</h2></div>
+        <ProjectPages enabled={!projectRoute} lang={lang}>
         {(!projectRoute || route === 'work/shopco') && <article className="featured-project" data-reveal>
           <a className="project-visual" href={demo} target="_blank" rel="noreferrer" aria-label={t.preview}>
             <div className="browser-bar" aria-hidden="true"><span className="browser-dots">● ● ●</span><span>shop.co / collection</span><ArrowUpRight size={16}/></div>
@@ -264,6 +266,7 @@ function App() {
           </div>
           <div className="project-footnote"><span>{lang === 'ru' ? '4 страницы · Мебель и интерьер' : '4 pages · Furniture and interiors'}</span><span>{lang === 'ru' ? 'Учебная демонстрация интерфейса магазина.' : 'Portfolio demonstration of a storefront interface.'}</span></div>
         </article>}
+        </ProjectPages>
       </section>}
       {route === 'about' && <section id="about" tabIndex={-1} className="section wrap about-section">
         <div data-reveal><p className="eyebrow">{t.aboutLabel}</p><h2>{t.aboutTitle}<br/><em>{t.aboutAccent}</em></h2><div className="about-stats"><div><b>2021</b><span>{t.experience}</span></div><div><b>{t.freelance}</b><span>{t.format}</span></div></div></div>

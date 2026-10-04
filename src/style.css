@@ -133,3 +133,11 @@
 }
 
 .telegram-icon,.social-icon{width:21px;height:21px;display:block}
+
+.project-pagination{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:24px;border-top:1px solid var(--line);margin-top:10px;min-width:0}
+.project-pagination p{margin:0;color:var(--muted);font-size:13px}
+.project-pagination-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:100%}
+.project-pagination-links a{display:grid;place-items:center;min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;color:var(--text);text-decoration:none;font-size:14px}
+.project-pagination-links a:hover{border-color:var(--accent)}
+.project-pagination-links a[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#15200b;font-weight:700}
+.project-pagination-links a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
