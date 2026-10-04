@@ -144,3 +144,5 @@
 
 .contact-actions{margin-top:32px;flex-wrap:wrap}.contact-address{margin-top:18px;color:var(--muted);font-size:14px;overflow-wrap:anywhere}
 @media(max-width:480px){.contact-actions{align-items:stretch;flex-direction:column}.contact-actions .button{width:100%;justify-content:center}}
+
+@media(max-width:760px){.footer-links{justify-content:center;gap:16px}.footer-links a{width:44px;justify-content:center}.footer-links .footer-back-top{display:none}}
