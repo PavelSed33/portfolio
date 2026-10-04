@@ -4,12 +4,14 @@ import {mkdir} from 'node:fs/promises';
 import {spawn} from 'node:child_process';
 import {chromium} from 'playwright';
 
+const basePath=(process.env.VITE_BASE_PATH?.trim() || '/').replace(/^\/?/,'/').replace(/\/?$/,'/');
+const previewUrl=`http://127.0.0.1:4173${basePath}`;
 const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4173'],{stdio:'inherit'});
 let browser;
 try{
   let ready=false;
   for(let i=0;i<100;i++){
-    try{const r=await fetch('http://127.0.0.1:4173/portfolio/');if(r.ok){ready=true;break}}catch{}
+    try{const r=await fetch(previewUrl);if(r.ok){ready=true;break}}catch{}
     await new Promise(r=>setTimeout(r,100));
   }
   assert(ready,'Preview server did not start');
@@ -20,7 +22,7 @@ try{
   for(const route of routes){
     const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
     const errors=[]; page.on('pageerror',e=>errors.push(e.message));
-    const response=await page.goto('http://127.0.0.1:4173/portfolio/'+route,{waitUntil:'networkidle'});
+    const response=await page.goto(previewUrl+route,{waitUntil:'networkidle'});
     assert(response?.ok(),`Route failed: ${route}`);
     await page.locator('h1,h2').first().waitFor();
     const size=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
@@ -31,14 +33,14 @@ try{
 
   for(const [width,height] of [[320,740],[390,844],[844,390],[768,1024],[1024,768],[1440,900],[1920,1080]]){
     const page=await browser.newPage({viewport:{width,height},reducedMotion:'reduce'});
-    await page.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
+    await page.goto(previewUrl,{waitUntil:'networkidle'});
     assert.equal(await page.locator('.featured-project').count(),3);
     assert.equal(await page.locator('.service-card').count(),4);
     assert.equal(await page.locator('.process-list li').count(),4);
     assert.equal(await page.locator('form').count(),0);
     await page.locator('img').evaluateAll(imgs=>imgs.forEach(img=>img.loading='eager'));
     await page.evaluate(()=>Promise.all([...document.images].map(img=>img.decode().catch(()=>{}))));
-    assert.equal(await page.locator('img[src^="/portfolio/"]').evaluateAll(imgs=>imgs.filter(img=>!img.naturalWidth).length),0,'Broken local image');
+    assert.equal(await page.locator(`img[src^="${basePath}"]`).evaluateAll(imgs=>imgs.filter(img=>!img.naturalWidth).length),0,'Broken local image');
     if(width<=760){
       assert(!(await page.locator('.footer-back-top').isVisible()));
     }
@@ -52,14 +54,14 @@ try{
   await about.goto('http://127.0.0.1:4173/portfolio/about/',{waitUntil:'networkidle'});
   assert.equal(await about.locator('#about').count(),1);
   assert.equal(await about.locator('#skills').count(),0);
-  assert.equal(await about.locator('a[href="/portfolio/about/"][aria-current="page"]').count(),1);
+  assert.equal(await about.locator(`a[href="${basePath}about/"][aria-current="page"]`).count(),1);
   await about.close();
 
   const skills=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
   await skills.goto('http://127.0.0.1:4173/portfolio/skills/',{waitUntil:'networkidle'});
   assert.equal(await skills.locator('#about').count(),0);
   assert.equal(await skills.locator('#skills').count(),1);
-  assert.equal(await skills.locator('a[href="/portfolio/skills/"][aria-current="page"]').count(),1);
+  assert.equal(await skills.locator(`a[href="${basePath}skills/"][aria-current="page"]`).count(),1);
   await skills.close();
 
   const projects=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
@@ -67,7 +69,7 @@ try{
   assert.equal(await projects.locator('.featured-project').count(),6);
   assert.equal(await projects.locator('.project-pagination a[aria-current="page"]').textContent(),'1');
   assert.equal(await projects.locator('.project-pagination a').count(),1);
-  assert.equal(await projects.locator('a[href="/portfolio/work/shopco/"]').count(),1);
+  assert.equal(await projects.locator(`a[href="${basePath}work/shopco/"]`).count(),1);
   await projects.getByRole('button',{name:'Switch to English',exact:true}).click();
   assert.equal(await projects.locator('html').getAttribute('lang'),'en');
   await projects.reload({waitUntil:'networkidle'});
@@ -84,7 +86,7 @@ try{
   await contact.close();
 
   const mobile=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
-  await mobile.goto('http://127.0.0.1:4173/portfolio/',{waitUntil:'networkidle'});
+  await mobile.goto(previewUrl,{waitUntil:'networkidle'});
   await mobile.getByRole('button',{name:'Открыть меню',exact:true}).click();
   assert(await mobile.locator('.navigation.is-open').isVisible());
   await mobile.close();
